@@ -39,8 +39,24 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter packages.
 flutter:
+  uses-material-design: true
+  generate: true
+  fonts:
+    - family: SfProText
+      fonts:
+        - asset: assets/fonts/sf_pro_text_light.ttf
+          weight: 300
+        - asset: assets/fonts/sf_pro_text_regular.ttf
+          weight: 400
+        - asset: assets/fonts/sf_pro_text_medium.ttf
+          weight: 500
+        - asset: assets/fonts/sf_pro_text_semibold.ttf
+          weight: 600
+        - asset: assets/fonts/sf_pro_text_bold.ttf
+          weight: 700
+        - asset: assets/fonts/sf_pro_text_heavy.ttf
+          weight: 900
 
 # To add assets to your package, add an assets section, like this:
 # assets:

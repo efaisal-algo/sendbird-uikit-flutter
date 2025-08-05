@@ -37,145 +37,87 @@ enum SBUTextColorType {
 }
 
 class SBUTextStyles {
-  static String fontFamily = 'Roboto';
-
+  static String fontFamily = 'SfProText';
   static TextStyle getTextStyle({
     required SBUTheme theme,
     required SBUTextType textType,
     required SBUTextColorType textColorType,
   }) {
-    final color = _getTextColor(
-      theme: theme,
-      textColorType: textColorType,
-    );
+    final color = _getTextColor(theme: theme, textColorType: textColorType);
+    const fontFamily = 'SfProText';
 
     switch (textType) {
       case SBUTextType.heading1:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w500,
-          fontSize: 18,
-          height: 1.111,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          height: 32 / 24,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
       case SBUTextType.heading2:
-        return TextStyle(
-          fontFamily: fontFamily,
-          fontWeight: FontWeight.w700,
-          fontSize: 16,
-          height: 1.25,
-          letterSpacing: -0.2,
-          color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
-        );
       case SBUTextType.subtitle1:
         return TextStyle(
           fontFamily: fontFamily,
+          fontSize: 18.0,
           fontWeight: FontWeight.w500,
-          fontSize: 16,
-          height: 1.375,
-          letterSpacing: -0.2,
+          height: 27 / 18,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
       case SBUTextType.subtitle2:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 16,
-          height: 1.5,
-          letterSpacing: -0.2,
+          fontSize: 18.0,
+          fontWeight: FontWeight.normal,
+          height: 27 / 18,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
       case SBUTextType.body1:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 16,
-          height: 1.25,
+          fontSize: 16.0,
+          fontWeight: FontWeight.normal,
+          height: 21 / 14,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
       case SBUTextType.body2:
+      case SBUTextType.button:
         return TextStyle(
           fontFamily: fontFamily,
+          fontSize: 16.0,
           fontWeight: FontWeight.w500,
-          fontSize: 14,
-          height: 1.142,
+          height: 21 / 14,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
       case SBUTextType.body3:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-          height: 1.428,
+          fontSize: 14.0,
+          fontWeight: FontWeight.normal,
+          height: 21 / 14,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
-        );
-      case SBUTextType.button:
-        return TextStyle(
-          fontFamily: fontFamily,
-          fontWeight: FontWeight.w700,
-          fontSize: 14,
-          height: 1.142,
-          letterSpacing: 0.4,
-          color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
       case SBUTextType.caption1:
-        return TextStyle(
-          fontFamily: fontFamily,
-          fontWeight: FontWeight.w700,
-          fontSize: 12,
-          height: 1,
-          color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
-        );
       case SBUTextType.caption2:
-        return TextStyle(
-          fontFamily: fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 12,
-          height: 1,
-          color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
-        );
       case SBUTextType.caption3:
-        return TextStyle(
-          fontFamily: fontFamily,
-          fontWeight: FontWeight.w700,
-          fontSize: 11,
-          height: 1.090,
-          color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
-        );
       case SBUTextType.caption4:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 11,
-          height: 1.090,
+          fontSize: 12.0,
+          fontWeight: FontWeight.normal,
+          height: 15.6 / 12,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
     }
   }
+
 
   static Color _getTextColor({
     required SBUTheme theme,
