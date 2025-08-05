@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:sendbird_uikit/sendbird_uikit.dart';
 import 'package:sendbird_uikit/src/internal/component/base/sbu_base_component.dart';
-import 'package:sendbird_uikit/src/internal/component/basic/sbu_icon_button_component.dart';
-import 'package:sendbird_uikit/src/internal/component/basic/sbu_icon_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_placeholder_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_scroll_bar_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_text_component.dart';
@@ -19,10 +17,12 @@ import 'package:sendbird_uikit/src/internal/resource/sbu_text_styles.dart';
 class SBUGroupChannelMembersScreen extends SBUStatefulComponent {
   final int messageCollectionNo;
   final void Function(GroupChannel)? onInviteButtonClicked;
+  final Widget? customHeader;
 
   const SBUGroupChannelMembersScreen({
     required this.messageCollectionNo,
     this.onInviteButtonClicked,
+    this.customHeader,
     super.key,
   });
 
@@ -69,7 +69,7 @@ class SBUGroupChannelMembersScreenState
 
     return Column(
       children: [
-        header,
+        widget.customHeader ?? header,
         Expanded(
           child: Container(
             width: double.maxFinite,
