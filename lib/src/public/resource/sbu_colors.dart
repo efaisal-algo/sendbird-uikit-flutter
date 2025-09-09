@@ -44,7 +44,7 @@ class SBUColors {
 
   static Color lightThemeTextHighEmphasis = const Color(0xE0000000); // Light-01
   static Color lightThemeTextMidEmphasis = const Color(0x80000000); // Light-02
-  static Color lightThemeTextLowEmphasis = const Color(0x61000000); // Light-03
+  static Color lightThemeTextLowEmphasis = const Color(0xFF595959); // Light-03
   static Color lightThemeTextDisabled = const Color(0x1F000000); // Light-04
 
   static Color darkThemeTextHighEmphasis = const Color(0xE0FFFFFF); // Dark-01
