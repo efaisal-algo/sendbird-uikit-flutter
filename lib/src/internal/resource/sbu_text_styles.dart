@@ -110,6 +110,7 @@ class SBUTextStyles {
         return TextStyle(
           fontFamily: fontFamily,
           fontSize: 15.0,
+          height: 21 / 16,
           fontWeight: FontWeight.normal,
           letterSpacing: -0.8,
           color: color,

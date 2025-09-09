@@ -998,7 +998,7 @@ class SBUMessageListItemComponentState
                         isMyMessage: true,
                       ) ??
                       Container(
-                        padding: const EdgeInsets.only(top: 7),
+                        padding: const EdgeInsets.only(top: 10, left: 4, bottom: 2),
                         decoration: BoxDecoration(
                           color: isLightTheme
                               ? SBUColors.primaryMain
@@ -1691,7 +1691,7 @@ class SBUMessageListItemComponentState
                         height: 104,
                         color: const Color(0x00FFFFFF).withOpacity(0.4),
                       ),
-                    ],
+                    ], 
                   ),
                 )
               : Container(
