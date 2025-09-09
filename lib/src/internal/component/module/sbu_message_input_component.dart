@@ -180,7 +180,7 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                   ),
                 ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -346,6 +346,9 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                                           package: 'sendbird_uikit',
                                           width: 40,
                                           height: 40,
+                                          color: isLightTheme
+                                              ? SBUColors.lightThemeTextHighEmphasis
+                                              : SBUColors.background50,
                                         ),
                                       ),
                                     ),
@@ -355,9 +358,13 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: isLightTheme
-                              ? SBUColors.background100
-                              : SBUColors.background400,
+                          color: isLightTheme ? const Color(0xFFF7F7F7) : SBUColors.overlayDark,
+                          border: isLightTheme
+                              ? Border.all(
+                                  color: const Color(0xFFE9E9E9),
+                                  width: 1,
+                                )
+                              : null,
                         ),
                         alignment: AlignmentDirectional.centerStart,
                         child: TextField(
@@ -383,9 +390,12 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                           enabled: !isDisabled,
                           style: SBUTextStyles.getTextStyle(
                             theme: theme,
-                            textType: SBUTextType.body3,
+                            textType: SBUTextType.body4,
                             textColorType: SBUTextColorType.text01,
-                          ).copyWith(color: const Color(0xFF171717)),
+                          ).copyWith(
+                              color: isLightTheme
+                                  ? SBUColors.lightThemeTextHighEmphasis
+                                  : SBUColors.darkThemeTextHighEmphasis),
                           cursorWidth: 1,
                           cursorHeight: 20,
                           cursorColor: isLightTheme
@@ -458,13 +468,13 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                             }
                           },
                           child: SizedBox(
-                            width: 40,
-                            height: 40,
+                            width: 55,
+                            height: 55,
                             child: Image.asset(
                               'assets/icons/ic_send.png',
                               package: 'sendbird_uikit',
-                              width: 40,
-                              height: 40,
+                              width: 55,
+                              height: 55,
                             ),
                           ),
                         ),

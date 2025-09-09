@@ -154,8 +154,8 @@ class SBUMessageListItemComponentState
               child: SBUTextComponent(
                 text: DateFormat('EEE, MMM dd').format(
                     DateTime.fromMillisecondsSinceEpoch(message.createdAt)),
-                textType: SBUTextType.caption4,
-                textColorType: SBUTextColorType.text03,
+                 textType: SBUTextType.caption4,
+                textColorType: SBUTextColorType.otherNewMessage,
               ),
             ),
           ),
@@ -733,8 +733,9 @@ class SBUMessageListItemComponentState
                                   Flexible(
                                     child: SBUTextComponent(
                                       text: message.message,
-                                      textType: SBUTextType.body3,
-                                      textColorType: SBUTextColorType.text01,
+                                      textType: SBUTextType.body4,
+                                      textColorType:
+                                          SBUTextColorType.otherNewMessage,
                                       textOverflowType: null,
                                       maxLines: null,
                                     ),
@@ -1003,9 +1004,9 @@ class SBUMessageListItemComponentState
                               ? SBUColors.primaryMain
                               : SBUColors.primaryLight,
                           borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16),
-                            bottomLeft: Radius.circular(16),
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                            bottomLeft: Radius.circular(20),
                             bottomRight: Radius.circular(0),
                           ),
                         ),
@@ -1022,8 +1023,9 @@ class SBUMessageListItemComponentState
                                   Flexible(
                                     child: SBUTextComponent(
                                       text: message.message,
-                                      textType: SBUTextType.body3,
-                                      textColorType: SBUTextColorType.message,
+                                      textType: SBUTextType.body4,
+                                      textColorType:
+                                          SBUTextColorType.newMessage,
                                       textOverflowType: null,
                                       maxLines: null,
                                     ),
@@ -1222,10 +1224,10 @@ class SBUMessageListItemComponentState
                               ? SBUColors.background100
                               : SBUColors.background400,
                       borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                         bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(16),
+                        bottomRight: Radius.circular(20),
                       ),
                     ),
                     child: thumbnailWidget != null
@@ -1532,9 +1534,9 @@ class SBUMessageListItemComponentState
                           ? SBUColors.primaryMain
                           : SBUColors.primaryLight,
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                    bottomLeft: Radius.circular(16),
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(0),
                   ),
                 ),
@@ -1633,10 +1635,10 @@ class SBUMessageListItemComponentState
                 const EdgeInsets.only(left: 12, top: 6, right: 12, bottom: 12),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
                 bottomLeft: Radius.circular(0),
-                bottomRight: Radius.circular(16),
+                bottomRight: Radius.circular(20),
               ),
               color: isLightTheme
                   ? SBUColors.background100
@@ -1698,10 +1700,10 @@ class SBUMessageListItemComponentState
                       left: 12, top: 6, right: 12, bottom: 12),
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                       bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(16),
+                      bottomRight: Radius.circular(20),
                     ),
                     color: isLightTheme
                         ? SBUColors.background100

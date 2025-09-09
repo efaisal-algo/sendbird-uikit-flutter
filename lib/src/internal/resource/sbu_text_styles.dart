@@ -12,11 +12,12 @@ enum SBUTextType {
   body1,
   body2,
   body3,
+  body4,
   button,
   caption1,
   caption2,
   caption3,
-  caption4,
+  caption4
 }
 
 enum SBUTextColorType {
@@ -34,6 +35,8 @@ enum SBUTextColorType {
   messageDate, // [light] darkThemeTextHighEmphasis, [dark] darkThemeTextMidEmphasis
   information, // [light] lightThemeTextHighEmphasis, [dark] lightThemeTextHighEmphasis
   disabled, // [light] lightThemeTextDisabled, [dark] darkThemeTextDisabled
+  newMessage, // [light] white, [dark] white
+  otherNewMessage, // [light] white, [dark] white
 }
 
 class SBUTextStyles {
@@ -102,7 +105,16 @@ class SBUTextStyles {
           height: 21 / 14,
           letterSpacing: -0.8,
           color: color,
+        );  
+      case SBUTextType.body4:
+        return TextStyle(
+          fontFamily: fontFamily,
+          fontSize: 15.0,
+          fontWeight: FontWeight.normal,
+          letterSpacing: -0.8,
+          color: color,
         );
+
       case SBUTextType.caption1:
       case SBUTextType.caption2:
       case SBUTextType.caption3:
@@ -114,10 +126,9 @@ class SBUTextStyles {
           height: 15.6 / 12,
           letterSpacing: -0.8,
           color: color,
-        );
+        ); 
     }
   }
-
 
   static Color _getTextColor({
     required SBUTheme theme,
@@ -209,6 +220,20 @@ class SBUTextStyles {
             return SBUColors.lightThemeTextDisabled;
           case SBUTheme.dark:
             return SBUColors.darkThemeTextDisabled;
+        }
+      case SBUTextColorType.newMessage:
+        switch (theme) {
+          case SBUTheme.light:
+            return SBUColors.lightThemeNewMssage;
+          case SBUTheme.dark:
+            return SBUColors.lightThemeNewMssage;
+        }
+      case SBUTextColorType.otherNewMessage:
+        switch (theme) {
+          case SBUTheme.light:
+            return SBUColors.lightThemeOtherNewMssage;
+          case SBUTheme.dark:
+            return SBUColors.darkThemeOtherNewMssage;
         }
     }
   }

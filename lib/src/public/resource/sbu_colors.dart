@@ -5,8 +5,8 @@ import 'dart:ui';
 /// SBUColors
 class SBUColors {
   static Color primaryExtraDark = const Color(0xFF491389); // Primary-500
-  static Color primaryDark = const Color(0xFF6211C8); // Primary-400
-  static Color primaryMain = const Color(0xFF742DDD); // Primary-300
+  static Color primaryDark = const Color(0xFFFF7A00); // Primary-400
+  static Color primaryMain = const Color(0xFFFF7A00); // Primary-300
   static Color primaryLight = const Color(0xFFC2A9FA); // Primary-200
   static Color primaryExtraLight = const Color(0xFFDBD1FF); // Primary-100
 
@@ -44,13 +44,17 @@ class SBUColors {
 
   static Color lightThemeTextHighEmphasis = const Color(0xE0000000); // Light-01
   static Color lightThemeTextMidEmphasis = const Color(0x80000000); // Light-02
-  static Color lightThemeTextLowEmphasis = const Color(0xFF595959); // Light-03
+  static Color lightThemeTextLowEmphasis = const Color(0x61000000); // Light-03
   static Color lightThemeTextDisabled = const Color(0x1F000000); // Light-04
+  static Color lightThemeNewMssage = const Color(0xFFFFFFFF); // Light-05
+  static Color lightThemeOtherNewMssage = const Color(0xFF595959); // Light-06
 
   static Color darkThemeTextHighEmphasis = const Color(0xE0FFFFFF); // Dark-01
   static Color darkThemeTextMidEmphasis = const Color(0x80FFFFFF); // Dark-02
   static Color darkThemeTextLowEmphasis = const Color(0x61FFFFFF); // Dark-03
   static Color darkThemeTextDisabled = const Color(0x1FFFFFFF); // Dark-04
+  static Color darkThemeNewMssage = const Color(0xFF595959); // Dark-05
+  static Color darkThemeOtherNewMssage = const Color(0xFFFFFFFF); // Dark-06
 
   /// Sets colors.
   static void setColors({
