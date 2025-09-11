@@ -6,15 +6,24 @@ import 'package:sendbird_uikit/sendbird_uikit.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await SendbirdUIKit.init(appId: 'F524C413-F43C-4637-AB58-E366DCE0CEF9');
-  await SendbirdUIKit.connect('50');
+  await SendbirdUIKit.init(appId: 'YOUR_APP_ID');
+  await SendbirdUIKit.connect('YOUR_USER_ID');
 
-  runApp(SendbirdUIKit.provider(
-    child: const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyApp(),
-    ),
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: SendbirdApp(),
   ));
+}
+
+class SendbirdApp extends StatelessWidget {
+  const SendbirdApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SendbirdUIKit.provider(
+      child: const MyApp(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
