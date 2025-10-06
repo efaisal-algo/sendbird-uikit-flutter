@@ -42,49 +42,63 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
     final backgroundColor = widget.backgroundColor;
     final isMutedMember = widget.isMutedMember;
 
-    return SizedBox(
+    return Container(
       width: width,
       height: height,
-      child: Stack(
-        children: [
-          _getAvatarImage(isLightTheme) ?? Container(),
-          Container(
-            width: width,
-            height: height,
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              shape: BoxShape.circle,
-            ),
+      decoration: BoxDecoration(
+        color: isLightTheme ? SBUColors.background50 : SBUColors.background600,
+        borderRadius: BorderRadius.circular(width * 0.0625), // 4px relative to 64px = 0.0625
+        boxShadow: [
+          BoxShadow(
+            color: (isLightTheme ? Colors.black : Colors.white).withOpacity(0.04),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
           ),
-          if (icon != null)
-            Padding(
-              padding:
-                  EdgeInsets.all(max((width - icon.iconSize) / 2, 0) as double),
-              child: icon,
-            ),
-          if (isMutedMember)
-            Stack(
-              children: [
-                Container(
-                  width: width,
-                  height: height,
-                  decoration: BoxDecoration(
-                    color: SBUColors.primaryMain.withOpacity(0.5),
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(
-                      max((width - width * 0.71428571428) / 2, 0) as double),
-                  child: SBUIconComponent(
-                    iconSize: width * 0.71428571428,
-                    iconData: SBUIcons.mute,
-                    iconColor: SBUColors.darkThemeTextHighEmphasis,
-                  ),
-                ),
-              ],
-            ),
         ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(width * 0.0625),
+        child: Stack(
+          children: [
+            _getAvatarImage(isLightTheme) ?? Container(),
+            Container(
+              width: width,
+              height: height,
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(width * 0.0625),
+              ),
+            ),
+            if (icon != null)
+              Padding(
+                padding:
+                    EdgeInsets.all(max((width - icon.iconSize) / 2, 0) as double),
+                child: icon,
+              ),
+            if (isMutedMember)
+              Stack(
+                children: [
+                  Container(
+                    width: width,
+                    height: height,
+                    decoration: BoxDecoration(
+                      color: SBUColors.primaryMain.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(width * 0.0625),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(
+                        max((width - width * 0.71428571428) / 2, 0) as double),
+                    child: SBUIconComponent(
+                      iconSize: width * 0.71428571428,
+                      iconData: SBUIcons.mute,
+                      iconColor: SBUColors.darkThemeTextHighEmphasis,
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }

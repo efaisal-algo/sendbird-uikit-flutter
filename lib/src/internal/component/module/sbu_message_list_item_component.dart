@@ -154,7 +154,7 @@ class SBUMessageListItemComponentState
               child: SBUTextComponent(
                 text: DateFormat('EEE, MMM dd').format(
                     DateTime.fromMillisecondsSinceEpoch(message.createdAt)),
-                 textType: SBUTextType.caption4,
+                textType: SBUTextType.caption4,
                 textColorType: SBUTextColorType.otherNewMessage,
               ),
             ),
@@ -587,10 +587,10 @@ class SBUMessageListItemComponentState
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 12, bottom: 2),
+          padding: const EdgeInsets.only(right: 12, top: 4),
           child: (isSameMinuteAtNextMessage == false)
               ? Material(
                   color: Colors.transparent,
@@ -998,7 +998,8 @@ class SBUMessageListItemComponentState
                         isMyMessage: true,
                       ) ??
                       Container(
-                        padding: const EdgeInsets.only(top: 10, left: 4, bottom: 2),
+                        padding:
+                            const EdgeInsets.only(top: 10, left: 4, bottom: 2),
                         decoration: BoxDecoration(
                           color: isLightTheme
                               ? SBUColors.primaryMain
@@ -1081,10 +1082,10 @@ class SBUMessageListItemComponentState
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 12, bottom: 2),
+          padding: const EdgeInsets.only(right: 12, top: 4),
           child: (isSameMinuteAtNextMessage == false)
               ? Material(
                   color: Colors.transparent,
@@ -1691,7 +1692,7 @@ class SBUMessageListItemComponentState
                         height: 104,
                         color: const Color(0x00FFFFFF).withOpacity(0.4),
                       ),
-                    ], 
+                    ],
                   ),
                 )
               : Container(

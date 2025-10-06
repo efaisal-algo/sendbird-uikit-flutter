@@ -41,21 +41,30 @@ class SBUBadgeComponentState extends State<SBUBadgeComponent> {
 
     Color color;
     if (isLarge) {
-      color = isLightTheme ? SBUColors.primaryMain : SBUColors.primaryLight;
+      color = isLightTheme
+          ? const Color(
+              0xFF9E9E9E) // Grey background for unread count as per Figma
+          : SBUColors.primaryLight;
     } else {
       color = isLightTheme ? SBUColors.errorMain : SBUColors.errorLight;
     }
 
     return Container(
       height: height,
-      alignment: Alignment.center,
+      constraints: BoxConstraints(
+        minWidth:
+            height, // Ensure minimum width equals height for circular badges
+      ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius:
+            BorderRadius.circular(height / 2), // Perfect circular radius
         color: color,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-        child: text,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        child: Center(
+          child: text,
+        ),
       ),
     );
   }

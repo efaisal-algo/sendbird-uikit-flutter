@@ -231,9 +231,7 @@ mixin SBUBaseComponent {
                 ? SBUIcons.doneAll
                 : SBUIcons.done,
             iconColor: isAllMembersRead
-                ? (isLightTheme
-                    ? SBUColors.secondaryMain
-                    : SBUColors.secondaryLight)
+                ? const Color(0xFFFF7A00) // Figma design orange color
                 : (isLightTheme
                     ? SBUColors.lightThemeTextLowEmphasis
                     : SBUColors.darkThemeTextLowEmphasis),

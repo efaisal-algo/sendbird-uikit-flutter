@@ -155,10 +155,10 @@ class SBUGroupChannelListItemComponentState
         : null;
 
     final item = SBUChannelListItemComponent(
-      width: width,
+      width: width, 
       height: height,
       backgroundColor:
-          isLightTheme ? SBUColors.background50 : SBUColors.background600,
+          isLightTheme ? const Color(0xFFF4F4F4) : SBUColors.background600,
       channel: channel,
       avatar: avatar,
       title: channelName,
