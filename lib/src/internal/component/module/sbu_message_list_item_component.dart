@@ -620,6 +620,7 @@ class SBUMessageListItemComponentState
                       isLightTheme: isLightTheme,
                       size: 26,
                       user: message.sender,
+                      showBorder: true,
                     ),
                   ),
                 )
@@ -1115,6 +1116,7 @@ class SBUMessageListItemComponentState
                       isLightTheme: isLightTheme,
                       size: 26,
                       user: message.sender,
+                      showBorder: true,
                     ),
                   ),
                 )

@@ -118,14 +118,22 @@ mixin SBUBaseComponent {
 
     // Get user initials (first two characters of nickname or userId)
     String? userInitials;
-    if (imageUrl.isEmpty && user != null) {
+    if (user != null) {
       final name = user.nickname.isNotEmpty ? user.nickname : user.userId;
       if (name.isNotEmpty) {
-        // Get first two characters, handling emojis and special characters
-        final runes = name.runes.toList();
-        userInitials = String.fromCharCodes(
-          runes.take(2).toList(),
-        ).toUpperCase();
+        final trimmedName = name.trim();
+        if (trimmedName.isNotEmpty) {
+          final words = trimmedName.split(' ');
+          if (words.length >= 2) {
+            // Get first char from first two words
+            userInitials = '${words[0][0]}${words[1][0]}'.toUpperCase();
+          } else {
+            // Get first two chars from single word
+            userInitials = trimmedName.length >= 2
+                ? trimmedName.substring(0, 2).toUpperCase()
+                : trimmedName[0].toUpperCase();
+          }
+        }
       }
     }
 

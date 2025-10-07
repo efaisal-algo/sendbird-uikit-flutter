@@ -48,23 +48,25 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
     final userInitials = widget.userInitials;
     final showBorder = widget.showBorder;
 
-    const orangeColor = Color(0xFFFF7A00);
+    // Orange color scheme for message sender avatars
+    const orangeColor = Color(0xFFFF8A00);
+    const lightOrangeBackground = Color(0xFFFFF4E8); // Orange with 10% opacity
+
+    // Determine if we should use orange styling (when showing border and no image URL)
+    final hasImage = widget.imageUrls != null &&
+        widget.imageUrls!.isNotEmpty &&
+        widget.imageUrls![0].isNotEmpty;
+    final useOrangeStyling = showBorder && !hasImage;
 
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: showBorder
-            ? orangeColor.withOpacity(0.1) // Orange with 10% opacity
+        color: useOrangeStyling
+            ? lightOrangeBackground
             : (isLightTheme ? SBUColors.background50 : SBUColors.background600),
         borderRadius:
             BorderRadius.circular(width / 2), // Make it perfectly circular
-        border: showBorder
-            ? Border.all(
-                color: orangeColor, // Orange border
-                width: 1,
-              )
-            : null,
         boxShadow: [
           BoxShadow(
             color:
@@ -74,15 +76,13 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
           ),
         ],
       ),
-      child: Padding(
-        padding: EdgeInsets.all(
-            showBorder ? 0.5 : 0), // 0.5 padding when border is shown
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(
-              (width - (showBorder ? 1 : 0)) / 2), // Make it perfectly circular
-          child: Stack(
-            children: [
-              _getAvatarImage(isLightTheme) ?? Container(),
+      child: ClipRRect(
+        borderRadius:
+            BorderRadius.circular(width / 2), // Make it perfectly circular
+        child: Stack(
+          children: [
+            _getAvatarImage(isLightTheme) ?? Container(),
+            if (!useOrangeStyling)
               Container(
                 width: width,
                 height: height,
@@ -92,51 +92,51 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
                       width / 2), // Make it perfectly circular
                 ),
               ),
-              if (icon != null && userInitials == null)
-                Padding(
-                  padding: EdgeInsets.all(
-                      max((width - icon.iconSize) / 2, 0) as double),
-                  child: icon,
-                ),
-              if (userInitials != null)
-                Center(
-                  child: Text(
-                    userInitials,
-                    style: TextStyle(
-                      fontSize: width * 0.4,
-                      fontWeight: FontWeight.w600,
-                      color: isLightTheme
-                          ? SBUColors.darkThemeTextHighEmphasis
-                          : SBUColors.lightThemeTextHighEmphasis,
-                    ),
+            if (icon != null && userInitials == null && !useOrangeStyling)
+              Padding(
+                padding: EdgeInsets.all(
+                    max((width - icon.iconSize) / 2, 0) as double),
+                child: icon,
+              ),
+            if (userInitials != null)
+              Center(
+                child: Text(
+                  userInitials,
+                  style: TextStyle(
+                    fontSize: width * 0.4,
+                    fontWeight: FontWeight.w600,
+                    color: useOrangeStyling
+                        ? orangeColor
+                        : (isLightTheme
+                            ? SBUColors.darkThemeTextHighEmphasis
+                            : SBUColors.lightThemeTextHighEmphasis),
                   ),
                 ),
-              if (isMutedMember)
-                Stack(
-                  children: [
-                    Container(
-                      width: width,
-                      height: height,
-                      decoration: BoxDecoration(
-                        color: SBUColors.primaryMain.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(
-                            width / 2), // Make it perfectly circular
-                      ),
+              ),
+            if (isMutedMember)
+              Stack(
+                children: [
+                  Container(
+                    width: width,
+                    height: height,
+                    decoration: BoxDecoration(
+                      color: SBUColors.primaryMain.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(
+                          width / 2), // Make it perfectly circular
                     ),
-                    Padding(
-                      padding: EdgeInsets.all(
-                          max((width - width * 0.71428571428) / 2, 0)
-                              as double),
-                      child: SBUIconComponent(
-                        iconSize: width * 0.71428571428,
-                        iconData: SBUIcons.mute,
-                        iconColor: SBUColors.darkThemeTextHighEmphasis,
-                      ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(
+                        max((width - width * 0.71428571428) / 2, 0) as double),
+                    child: SBUIconComponent(
+                      iconSize: width * 0.71428571428,
+                      iconData: SBUIcons.mute,
+                      iconColor: SBUColors.darkThemeTextHighEmphasis,
                     ),
-                  ],
-                ),
-            ],
-          ),
+                  ),
+                ],
+              ),
+          ],
         ),
       ),
     );
