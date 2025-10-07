@@ -47,17 +47,20 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
       height: height,
       decoration: BoxDecoration(
         color: isLightTheme ? SBUColors.background50 : SBUColors.background600,
-        borderRadius: BorderRadius.circular(width * 0.0625), // 4px relative to 64px = 0.0625
+        borderRadius:
+            BorderRadius.circular(width / 2), // Make it perfectly circular
         boxShadow: [
           BoxShadow(
-            color: (isLightTheme ? Colors.black : Colors.white).withOpacity(0.04),
+            color:
+                (isLightTheme ? Colors.black : Colors.white).withOpacity(0.04),
             blurRadius: 2,
             offset: const Offset(0, 1),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(width * 0.0625),
+        borderRadius:
+            BorderRadius.circular(width / 2), // Make it perfectly circular
         child: Stack(
           children: [
             _getAvatarImage(isLightTheme) ?? Container(),
@@ -66,13 +69,14 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
               height: height,
               decoration: BoxDecoration(
                 color: backgroundColor,
-                borderRadius: BorderRadius.circular(width * 0.0625),
+                borderRadius: BorderRadius.circular(
+                    width / 2), // Make it perfectly circular
               ),
             ),
             if (icon != null)
               Padding(
-                padding:
-                    EdgeInsets.all(max((width - icon.iconSize) / 2, 0) as double),
+                padding: EdgeInsets.all(
+                    max((width - icon.iconSize) / 2, 0) as double),
                 child: icon,
               ),
             if (isMutedMember)
@@ -83,7 +87,8 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
                     height: height,
                     decoration: BoxDecoration(
                       color: SBUColors.primaryMain.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(width * 0.0625),
+                      borderRadius: BorderRadius.circular(
+                          width / 2), // Make it perfectly circular
                     ),
                   ),
                   Padding(

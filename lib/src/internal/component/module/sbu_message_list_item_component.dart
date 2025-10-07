@@ -587,10 +587,10 @@ class SBUMessageListItemComponentState
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 12, top: 4),
+          padding: const EdgeInsets.only(right: 12, bottom: 4),
           child: (isSameMinuteAtNextMessage == false)
               ? Material(
                   color: Colors.transparent,
@@ -1082,10 +1082,10 @@ class SBUMessageListItemComponentState
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 12, top: 4),
+          padding: const EdgeInsets.only(right: 12, bottom: 4),
           child: (isSameMinuteAtNextMessage == false)
               ? Material(
                   color: Colors.transparent,
