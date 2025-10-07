@@ -216,9 +216,9 @@ class SBUStrings {
     // GroupChannel list
     channels: 'Channels',
     yesterday: 'Yesterday',
-    turnPushNotificationOff: 'Turn push notification off',
-    turnPushNotificationOn: 'Turn push notification on',
-    leaveChannel: 'Leave channel',
+    turnPushNotificationOff: 'Turn notification off',
+    turnPushNotificationOn: 'Turn notification on',
+    leaveChannel: 'Delete and leave chat',
     noMembers: '(No members)',
     isTyping: (user) => '$user is typing…',
     areTyping: (userA, userB) => '$userA and $userB are typing…',

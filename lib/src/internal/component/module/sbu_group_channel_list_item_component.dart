@@ -10,7 +10,8 @@ import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:sendbird_uikit/sendbird_uikit.dart';
 import 'package:sendbird_uikit/src/internal/component/base/sbu_base_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_badge_component.dart';
-import 'package:sendbird_uikit/src/internal/component/basic/sbu_dialog_menu_component.dart';
+import 'package:sendbird_uikit/src/internal/component/basic/sbu_channel_options_dialog.dart';
+import 'package:sendbird_uikit/src/internal/component/basic/sbu_leave_channel_bottom_sheet.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_file_icon_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_icon_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_text_component.dart';
@@ -155,7 +156,7 @@ class SBUGroupChannelListItemComponentState
         : null;
 
     final item = SBUChannelListItemComponent(
-      width: width, 
+      width: width,
       height: height,
       backgroundColor:
           isLightTheme ? const Color(0xFFF4F4F4) : SBUColors.background600,
@@ -178,20 +179,16 @@ class SBUGroupChannelListItemComponentState
         final groupChannel = channel as GroupChannel;
         final isPushOff = (groupChannel.myPushTriggerOption ==
             GroupChannelPushTriggerOption.off);
-        final isPushStatusString = isPushOff
-            ? strings.turnPushNotificationOn
-            : strings.turnPushNotificationOff;
-        await showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) => SBUDialogMenuComponent(
-            title: widget.getGroupChannelName(channel, strings),
-            buttonNames: [
-              if (!kIsWeb) isPushStatusString,
-              strings.leaveChannel,
-            ],
-            onButtonClicked: (buttonName) async {
-              if (buttonName == isPushStatusString) {
+
+        // Show custom channel options dialog
+        if (!kIsWeb) {
+          await showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => SBUChannelOptionsDialog(
+              title: widget.getGroupChannelName(channel, strings),
+              isPushOff: isPushOff,
+              onTurnOffNotifications: () {
                 runZonedGuarded(() async {
                   if (isPushOff) {
                     await groupChannel.setMyPushTriggerOption(
@@ -203,16 +200,32 @@ class SBUGroupChannelListItemComponentState
                 }, (error, stack) {
                   // TODO: Check error
                 });
-              } else if (buttonName == strings.leaveChannel) {
-                runZonedGuarded(() async {
-                  await groupChannel.leave();
-                }, (error, stack) {
-                  // TODO: Check error
-                });
-              }
-            },
-          ),
-        );
+              },
+              onDeleteAndLeave: () async {
+                // Show confirmation bottom sheet
+                await showModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  isScrollControlled: true,
+                  builder: (context) => SBULeaveChannelBottomSheet(
+                    channel: groupChannel,
+                    channelName: widget.getGroupChannelName(channel, strings),
+                    onConfirm: () {
+                      runZonedGuarded(() async {
+                        await groupChannel.leave();
+                      }, (error, stack) {
+                        // TODO: Check error
+                      });
+                    },
+                    onCancel: () {
+                      // Do nothing, just dismiss
+                    },
+                  ),
+                );
+              },
+            ),
+          );
+        }
       },
     );
 
