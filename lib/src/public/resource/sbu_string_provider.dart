@@ -290,7 +290,7 @@ class SBUStrings {
     enterName: 'Enter name',
 
     // GroupChannel moderations
-    operators: 'Operators',
+    operators: 'Admins',
     mutedMembers: 'Muted members',
     bannedUsers: 'Banned users',
     freezeChannel: 'Freeze channel',
@@ -300,9 +300,9 @@ class SBUStrings {
 
     // GroupChannel members
     you: 'You',
-    operator: 'Operator',
-    registerAsOperator: 'Register as operator',
-    unregisterOperator: 'Unregister operator',
+    operator: 'Admin',
+    registerAsOperator: 'Register as Admin',
+    unregisterOperator: 'Unregister Admin',
     mute: 'Mute',
     unmute: 'Unmute',
     ban: 'Ban',

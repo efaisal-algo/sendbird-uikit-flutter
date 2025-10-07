@@ -16,6 +16,8 @@ class SBUAvatarComponent extends SBUStatefulComponent {
   final Color? backgroundColor;
   final List<String>? imageUrls;
   final bool isMutedMember;
+  final String? userInitials;
+  final bool showBorder;
 
   const SBUAvatarComponent({
     required this.width,
@@ -24,6 +26,8 @@ class SBUAvatarComponent extends SBUStatefulComponent {
     this.backgroundColor,
     this.imageUrls,
     this.isMutedMember = false,
+    this.userInitials,
+    this.showBorder = false,
     super.key,
   });
 
@@ -41,14 +45,26 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
     final icon = widget.icon;
     final backgroundColor = widget.backgroundColor;
     final isMutedMember = widget.isMutedMember;
+    final userInitials = widget.userInitials;
+    final showBorder = widget.showBorder;
+
+    const orangeColor = Color(0xFFFF7A00);
 
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: isLightTheme ? SBUColors.background50 : SBUColors.background600,
+        color: showBorder
+            ? orangeColor.withOpacity(0.1) // Orange with 10% opacity
+            : (isLightTheme ? SBUColors.background50 : SBUColors.background600),
         borderRadius:
             BorderRadius.circular(width / 2), // Make it perfectly circular
+        border: showBorder
+            ? Border.all(
+                color: orangeColor, // Orange border
+                width: 1,
+              )
+            : null,
         boxShadow: [
           BoxShadow(
             color:
@@ -58,51 +74,69 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius:
-            BorderRadius.circular(width / 2), // Make it perfectly circular
-        child: Stack(
-          children: [
-            _getAvatarImage(isLightTheme) ?? Container(),
-            Container(
-              width: width,
-              height: height,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(
-                    width / 2), // Make it perfectly circular
+      child: Padding(
+        padding: EdgeInsets.all(
+            showBorder ? 0.5 : 0), // 0.5 padding when border is shown
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(
+              (width - (showBorder ? 1 : 0)) / 2), // Make it perfectly circular
+          child: Stack(
+            children: [
+              _getAvatarImage(isLightTheme) ?? Container(),
+              Container(
+                width: width,
+                height: height,
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  borderRadius: BorderRadius.circular(
+                      width / 2), // Make it perfectly circular
+                ),
               ),
-            ),
-            if (icon != null)
-              Padding(
-                padding: EdgeInsets.all(
-                    max((width - icon.iconSize) / 2, 0) as double),
-                child: icon,
-              ),
-            if (isMutedMember)
-              Stack(
-                children: [
-                  Container(
-                    width: width,
-                    height: height,
-                    decoration: BoxDecoration(
-                      color: SBUColors.primaryMain.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(
-                          width / 2), // Make it perfectly circular
+              if (icon != null && userInitials == null)
+                Padding(
+                  padding: EdgeInsets.all(
+                      max((width - icon.iconSize) / 2, 0) as double),
+                  child: icon,
+                ),
+              if (userInitials != null)
+                Center(
+                  child: Text(
+                    userInitials,
+                    style: TextStyle(
+                      fontSize: width * 0.4,
+                      fontWeight: FontWeight.w600,
+                      color: isLightTheme
+                          ? SBUColors.darkThemeTextHighEmphasis
+                          : SBUColors.lightThemeTextHighEmphasis,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(
-                        max((width - width * 0.71428571428) / 2, 0) as double),
-                    child: SBUIconComponent(
-                      iconSize: width * 0.71428571428,
-                      iconData: SBUIcons.mute,
-                      iconColor: SBUColors.darkThemeTextHighEmphasis,
+                ),
+              if (isMutedMember)
+                Stack(
+                  children: [
+                    Container(
+                      width: width,
+                      height: height,
+                      decoration: BoxDecoration(
+                        color: SBUColors.primaryMain.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(
+                            width / 2), // Make it perfectly circular
+                      ),
                     ),
-                  ),
-                ],
-              ),
-          ],
+                    Padding(
+                      padding: EdgeInsets.all(
+                          max((width - width * 0.71428571428) / 2, 0)
+                              as double),
+                      child: SBUIconComponent(
+                        iconSize: width * 0.71428571428,
+                        iconData: SBUIcons.mute,
+                        iconColor: SBUColors.darkThemeTextHighEmphasis,
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
     );

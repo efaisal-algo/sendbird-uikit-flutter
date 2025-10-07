@@ -16,6 +16,7 @@ import 'package:sendbird_uikit/src/internal/component/basic/sbu_file_icon_compon
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_icon_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_text_component.dart';
 import 'package:sendbird_uikit/src/internal/component/module/sbu_channel_list_item_component.dart';
+import 'package:sendbird_uikit/src/internal/component/module/sbu_channel_list_avatar_widget.dart';
 import 'package:sendbird_uikit/src/internal/resource/sbu_text_styles.dart';
 
 class SBUGroupChannelListItemComponent extends SBUStatefulComponent {
@@ -49,10 +50,10 @@ class SBUGroupChannelListItemComponentState
     final channel = widget.channel;
     final onListItemClicked = widget.onListItemClicked;
 
-    final avatar = widget.getGroupChannelAvatarComponent(
-      isLightTheme: isLightTheme,
-      size: 56,
+    // Custom avatar widget with white background and rounded square shape (Figma design)
+    final avatar = SBUChannelListAvatarWidget(
       channel: channel,
+      size: 64,
     );
 
     final channelName = SBUTextComponent(

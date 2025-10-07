@@ -112,8 +112,22 @@ mixin SBUBaseComponent {
     required bool isLightTheme,
     required double size,
     User? user,
+    bool showBorder = false,
   }) {
     final imageUrl = user?.profileUrl ?? '';
+
+    // Get user initials (first two characters of nickname or userId)
+    String? userInitials;
+    if (imageUrl.isEmpty && user != null) {
+      final name = user.nickname.isNotEmpty ? user.nickname : user.userId;
+      if (name.isNotEmpty) {
+        // Get first two characters, handling emojis and special characters
+        final runes = name.runes.toList();
+        userInitials = String.fromCharCodes(
+          runes.take(2).toList(),
+        ).toUpperCase();
+      }
+    }
 
     SBUIconComponent? icon = imageUrl.isEmpty
         ? SBUIconComponent(
@@ -133,6 +147,8 @@ mixin SBUBaseComponent {
       backgroundColor: backgroundColor,
       imageUrls: imageUrl.isNotEmpty ? [imageUrl] : [],
       isMutedMember: (user is Member && user.isMuted),
+      userInitials: userInitials,
+      showBorder: showBorder,
     );
   }
 

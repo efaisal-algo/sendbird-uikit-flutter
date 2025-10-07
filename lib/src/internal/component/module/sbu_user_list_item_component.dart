@@ -20,6 +20,110 @@ enum SBUModerationType {
   bannedUsers,
 }
 
+/// Custom avatar widget for member list items
+class _MemberAvatar extends StatelessWidget {
+  final User user;
+  final double size;
+  final bool isLightTheme;
+
+  const _MemberAvatar({
+    required this.user,
+    required this.size,
+    required this.isLightTheme,
+  });
+
+  String _getInitials(String name) {
+    final trimmedName = name.trim();
+    if (trimmedName.isEmpty) return '';
+
+    final words = trimmedName.split(' ');
+    if (words.length >= 2) {
+      // Get first char from first two words
+      return '${words[0][0]}${words[1][0]}'.toUpperCase();
+    } else {
+      // Get first two chars from single word
+      return trimmedName.length >= 2
+          ? trimmedName.substring(0, 2).toUpperCase()
+          : trimmedName[0].toUpperCase();
+    }
+  }
+
+  Color _getBackgroundColor() {
+    // Light background color for initials
+    return isLightTheme
+        ? const Color(0xFFFFF4E8) // Light peach/orange background
+        : const Color(0xFF3E3E3E); // Dark theme background
+  }
+
+  Color _getTextColor() {
+    return isLightTheme
+        ? const Color(0xFFFF8A00) // Orange text
+        : const Color(0xFFFFB74D); // Light orange for dark theme
+  }
+
+  Color _getBorderColor() {
+    return isLightTheme
+        ? const Color(0xFFE0E0E0) // Light gray border
+        : const Color(0xFF505050); // Dark gray border
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final profileUrl = user.profileUrl;
+    final hasImage = profileUrl.isNotEmpty;
+    final nickname = user.nickname.isEmpty ? user.userId : user.nickname;
+    final initials = _getInitials(nickname);
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: _getBorderColor(),
+          width: 0.5,
+        ),
+        color: hasImage ? Colors.transparent : _getBackgroundColor(),
+      ),
+      child: ClipOval(
+        child: hasImage
+            ? Image.network(
+                profileUrl,
+                width: size,
+                height: size,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  // Fallback to initials if image fails to load
+                  return Container(
+                    color: _getBackgroundColor(),
+                    child: Center(
+                      child: Text(
+                        initials,
+                        style: TextStyle(
+                          color: _getTextColor(),
+                          fontSize: size * 0.4,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              )
+            : Center(
+                child: Text(
+                  initials,
+                  style: TextStyle(
+                    color: _getTextColor(),
+                    fontSize: size * 0.4,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+      ),
+    );
+  }
+}
+
 class SBUUserListItemComponent extends SBUStatefulComponent {
   final double width;
   final double height;
@@ -76,10 +180,10 @@ class SBUUserListItemComponentState extends State<SBUUserListItemComponent> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: widget.getAvatarComponent(
-              isLightTheme: isLightTheme,
-              size: 36,
+            child: _MemberAvatar(
               user: user,
+              size: 36,
+              isLightTheme: isLightTheme,
             ),
           ),
           Expanded(

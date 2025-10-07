@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:sendbird_uikit/src/internal/component/base/sbu_base_component.dart';
-import 'package:sendbird_uikit/src/internal/component/basic/sbu_avatar_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_badge_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_file_icon_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_icon_component.dart';
@@ -17,7 +16,7 @@ class SBUChannelListItemComponent extends SBUStatefulComponent {
   final double height;
   final Color backgroundColor;
   final BaseChannel channel;
-  final SBUAvatarComponent avatar;
+  final Widget avatar;
   final SBUTextComponent title;
   final SBUTextComponent date;
   final SBUTextComponent lastMessage;
