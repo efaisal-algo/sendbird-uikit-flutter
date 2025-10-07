@@ -63,8 +63,8 @@ class _MemberAvatar extends StatelessWidget {
 
   Color _getBorderColor() {
     return isLightTheme
-        ? const Color(0xFFE0E0E0) // Light gray border
-        : const Color(0xFF505050); // Dark gray border
+        ? const Color(0xFFFF8A00) // Orange border
+        : const Color(0xFFFFB74D); // Light orange for dark theme
   }
 
   @override
@@ -81,7 +81,7 @@ class _MemberAvatar extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(
           color: _getBorderColor(),
-          width: 0.5,
+          width: 1,
         ),
         color: hasImage ? Colors.transparent : _getBackgroundColor(),
       ),
