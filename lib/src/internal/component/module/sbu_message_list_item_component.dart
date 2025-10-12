@@ -148,7 +148,9 @@ class SBUMessageListItemComponentState
               padding:
                   const EdgeInsets.only(left: 10, top: 4, right: 10, bottom: 4),
               decoration: BoxDecoration(
-                color: isLightTheme ? Color(0xFFF4F4F4) : SBUColors.overlayDark,
+                color: isLightTheme
+                    ? SBUColors.background100
+                    : SBUColors.overlayDark,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SBUTextComponent(
@@ -1692,7 +1694,7 @@ class SBUMessageListItemComponentState
                       Container(
                         width: 156,
                         height: 104,
-                        color: const Color(0x00FFFFFF).withOpacity(0.4),
+                        color: SBUColors.overlayLight,
                       ),
                     ],
                   ),

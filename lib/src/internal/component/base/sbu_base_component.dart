@@ -146,7 +146,10 @@ mixin SBUBaseComponent {
                 : SBUColors.lightThemeTextHighEmphasis,
           )
         : null;
-    Color? backgroundColor = imageUrl.isEmpty ? SBUColors.background300 : null;
+    // Theme-aware background color for avatars without images
+    Color? backgroundColor = imageUrl.isEmpty
+        ? (isLightTheme ? SBUColors.background300 : SBUColors.background400)
+        : null;
 
     return SBUAvatarComponent(
       width: size,
@@ -193,7 +196,10 @@ mixin SBUBaseComponent {
                 : SBUColors.lightThemeTextHighEmphasis,
           )
         : null;
-    Color? backgroundColor = imageUrls.isEmpty ? SBUColors.background300 : null;
+    // Theme-aware background color for group channel avatars without images
+    Color? backgroundColor = imageUrls.isEmpty
+        ? (isLightTheme ? SBUColors.background300 : SBUColors.background400)
+        : null;
 
     if (channel.isBroadcast) {
       imageUrls.clear();

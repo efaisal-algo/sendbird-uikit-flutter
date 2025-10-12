@@ -48,23 +48,24 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
     final userInitials = widget.userInitials;
     final showBorder = widget.showBorder;
 
-    // Orange color scheme for message sender avatars
-    const orangeColor = Color(0xFFFF8A00);
-    const lightOrangeBackground = Color(0xFFFFF4E8); // Orange with 10% opacity
-
-    // Determine if we should use orange styling (when showing border and no image URL)
+    // Determine if we should use orange styling for message sender avatars
     final hasImage = widget.imageUrls != null &&
         widget.imageUrls!.isNotEmpty &&
         widget.imageUrls![0].isNotEmpty;
     final useOrangeStyling = showBorder && !hasImage;
 
+    // Light orange background for light mode, dark gray for dark mode
+    final Color containerBackground = useOrangeStyling
+        ? (isLightTheme
+            ? const Color(0xFFFFF4E8) // Original light orange for light mode
+            : SBUColors.background400) // Dark gray for dark mode
+        : (isLightTheme ? SBUColors.background50 : SBUColors.background600);
+
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: useOrangeStyling
-            ? lightOrangeBackground
-            : (isLightTheme ? SBUColors.background50 : SBUColors.background600),
+        color: containerBackground,
         borderRadius:
             BorderRadius.circular(width / 2), // Make it perfectly circular
         boxShadow: [
@@ -106,7 +107,7 @@ class SBUAvatarComponentState extends State<SBUAvatarComponent> {
                     fontSize: width * 0.4,
                     fontWeight: FontWeight.w600,
                     color: useOrangeStyling
-                        ? orangeColor
+                        ? SBUColors.primaryMain
                         : (isLightTheme
                             ? SBUColors.darkThemeTextHighEmphasis
                             : SBUColors.lightThemeTextHighEmphasis),
