@@ -1,7 +1,9 @@
 // Copyright (c) 2024 Sendbird, Inc. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
+import 'package:sendbird_uikit/sendbird_uikit.dart';
 import 'package:sendbird_uikit/src/internal/component/base/sbu_base_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_image_component.dart';
 
@@ -29,17 +31,20 @@ class _SBULeaveChannelBottomSheetState
     extends State<SBULeaveChannelBottomSheet> {
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = context.watch<SBUThemeProvider>().isLight();
+
     return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFFFFFFFF), // White background
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: isLightTheme ? SBUColors.background50 : SBUColors.background500,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
         ),
         boxShadow: [
           BoxShadow(
-            color: Color(0x26000000), // rgba(0,0,0,0.15)
-            offset: Offset(0, -4),
+            color:
+                (isLightTheme ? Colors.black : Colors.white).withOpacity(0.15),
+            offset: const Offset(0, -4),
             blurRadius: 10,
             spreadRadius: 0,
           ),
@@ -55,7 +60,9 @@ class _SBULeaveChannelBottomSheetState
               width: 24,
               height: 4,
               decoration: BoxDecoration(
-                color: const Color(0xFF9A9A9A), // Secondary color
+                color: isLightTheme
+                    ? SBUColors.background300
+                    : SBUColors.background400,
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
@@ -82,7 +89,7 @@ class _SBULeaveChannelBottomSheetState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // "Are you sure you want to leave: "
-                        const SizedBox(
+                        SizedBox(
                           width: double.infinity,
                           child: Text(
                             'Are you sure you want to leave: ',
@@ -90,7 +97,9 @@ class _SBULeaveChannelBottomSheetState
                               fontFamily: 'SfProText',
                               fontSize: 20,
                               fontWeight: FontWeight.w500, // Medium
-                              color: Color(0xFF595959), // Main 2 color
+                              color: isLightTheme
+                                  ? SBUColors.lightThemeTextMidEmphasis
+                                  : SBUColors.darkThemeTextMidEmphasis,
                               letterSpacing: -0.8,
                               height: 1.0,
                             ),
@@ -104,11 +113,13 @@ class _SBULeaveChannelBottomSheetState
                           width: double.infinity,
                           child: Text(
                             widget.channelName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'SfProText',
                               fontSize: 20,
                               fontWeight: FontWeight.w500, // Medium
-                              color: Color(0xFF171717), // Main color
+                              color: isLightTheme
+                                  ? SBUColors.lightThemeTextHighEmphasis
+                                  : SBUColors.darkThemeTextHighEmphasis,
                               letterSpacing: -0.8,
                               height: 1.0,
                             ),
@@ -136,20 +147,24 @@ class _SBULeaveChannelBottomSheetState
                           decoration: BoxDecoration(
                             color: Colors.transparent,
                             border: Border.all(
-                              color: const Color(0xFF595959), // Main 2 color
+                              color: isLightTheme
+                                  ? SBUColors.lightThemeTextMidEmphasis
+                                  : SBUColors.darkThemeTextMidEmphasis,
                               width: 1,
                             ),
                             borderRadius: BorderRadius.circular(100),
                           ),
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: const Text(
+                          child: Text(
                             'Cancel',
                             style: TextStyle(
                               fontFamily: 'SfProText',
                               fontSize: 16,
                               fontWeight: FontWeight.w500, // Medium
-                              color: Color(0xFF595959), // Main 2 color
+                              color: isLightTheme
+                                  ? SBUColors.lightThemeTextMidEmphasis
+                                  : SBUColors.darkThemeTextMidEmphasis,
                               letterSpacing: -0.32,
                               height: 1.0,
                             ),
@@ -170,18 +185,22 @@ class _SBULeaveChannelBottomSheetState
                         child: Container(
                           height: 48,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFF7A00), // Accent color
+                            color: isLightTheme
+                                ? SBUColors.primaryMain
+                                : SBUColors.primaryLight,
                             borderRadius: BorderRadius.circular(100),
                           ),
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: const Text(
+                          child: Text(
                             'Leave',
                             style: TextStyle(
                               fontFamily: 'SfProText',
                               fontSize: 16,
                               fontWeight: FontWeight.w500, // Medium
-                              color: Color(0xFFFFFFFF), // White
+                              color: isLightTheme
+                                  ? SBUColors.background50
+                                  : SBUColors.background700,
                               letterSpacing: -0.32,
                               height: 1.0,
                             ),
@@ -207,7 +226,9 @@ class _SBULeaveChannelBottomSheetState
                   width: 135,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF171717), // Main color
+                    color: isLightTheme
+                        ? SBUColors.lightThemeTextHighEmphasis
+                        : SBUColors.darkThemeTextHighEmphasis,
                     borderRadius: BorderRadius.circular(100),
                   ),
                 ),
@@ -220,6 +241,7 @@ class _SBULeaveChannelBottomSheetState
   }
 
   Widget _buildChannelAvatar() {
+    final isLightTheme = context.watch<SBUThemeProvider>().isLight();
     final coverUrl = widget.channel.coverUrl;
 
     return SizedBox(
@@ -230,7 +252,7 @@ class _SBULeaveChannelBottomSheetState
           shape: BoxShape.circle,
           border: Border.all(
             color:
-                const Color(0xFFFF7A00), // Orange border - same as Leave button
+                isLightTheme ? SBUColors.primaryMain : SBUColors.primaryLight,
             width: 1,
           ),
         ),
@@ -241,11 +263,15 @@ class _SBULeaveChannelBottomSheetState
                   cacheKey: coverUrl,
                 )
               : Container(
-                  color: const Color(0xFFE0E0E0),
-                  child: const Icon(
+                  color: isLightTheme
+                      ? SBUColors.background200
+                      : SBUColors.background400,
+                  child: Icon(
                     Icons.person,
                     size: 40,
-                    color: Color(0xFF9A9A9A),
+                    color: isLightTheme
+                        ? SBUColors.background300
+                        : SBUColors.background300,
                   ),
                 ),
         ),
