@@ -28,6 +28,7 @@ class SBUChannelOptionsDialog extends SBUStatefulComponent {
 class _SBUChannelOptionsDialogState extends State<SBUChannelOptionsDialog> {
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = context.watch<SBUThemeProvider>().isLight();
     final strings = context.watch<SBUStringProvider>().strings;
 
     // Get the notification action text based on current push status
@@ -40,8 +41,14 @@ class _SBUChannelOptionsDialogState extends State<SBUChannelOptionsDialog> {
       insetPadding: const EdgeInsets.symmetric(horizontal: 40),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFFFFFFFF), // White background
-          border: Border.all(color: const Color(0xFFF7F7F7), width: 1),
+          color:
+              isLightTheme ? SBUColors.background50 : SBUColors.background500,
+          border: Border.all(
+            color: isLightTheme
+                ? SBUColors.background100
+                : SBUColors.background400,
+            width: 1,
+          ),
           borderRadius: BorderRadius.circular(8),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -53,11 +60,13 @@ class _SBUChannelOptionsDialogState extends State<SBUChannelOptionsDialog> {
               padding: const EdgeInsets.only(bottom: 12, top: 4),
               child: Text(
                 widget.title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'SfProText',
                   fontSize: 16,
                   fontWeight: FontWeight.w500, // Medium - 500
-                  color: Color(0xFF171717), // Main color
+                  color: isLightTheme
+                      ? SBUColors.lightThemeTextHighEmphasis
+                      : SBUColors.darkThemeTextHighEmphasis,
                   letterSpacing: -0.64,
                   height: 1.0,
                 ),
@@ -90,11 +99,13 @@ class _SBUChannelOptionsDialogState extends State<SBUChannelOptionsDialog> {
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
                               notificationText,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'SfProText',
                                 fontSize: 15,
                                 fontWeight: FontWeight.w400, // Regular
-                                color: Color(0xFF171717), // Main color
+                                color: isLightTheme
+                                    ? SBUColors.lightThemeTextHighEmphasis
+                                    : SBUColors.darkThemeTextHighEmphasis,
                                 letterSpacing: -0.3,
                                 height: 1.0,
                               ),
@@ -105,11 +116,19 @@ class _SBUChannelOptionsDialogState extends State<SBUChannelOptionsDialog> {
                         // Notification icon - 17x17px positioned at y=10.5
                         Padding(
                           padding: const EdgeInsets.only(top: 10.5),
-                          child: Image.asset(
-                            'assets/icons/ic_notification_off.png',
-                            width: 17,
-                            height: 17,
-                            package: 'sendbird_uikit',
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              isLightTheme
+                                  ? Colors.transparent
+                                  : SBUColors.darkThemeTextHighEmphasis,
+                              isLightTheme ? BlendMode.dst : BlendMode.srcIn,
+                            ),
+                            child: Image.asset(
+                              'assets/icons/ic_notification_off.png',
+                              width: 17,
+                              height: 17,
+                              package: 'sendbird_uikit',
+                            ),
                           ),
                         ),
                       ],
@@ -136,11 +155,13 @@ class _SBUChannelOptionsDialogState extends State<SBUChannelOptionsDialog> {
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
                               strings.leaveChannel,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: 'SfProText',
                                 fontSize: 15,
                                 fontWeight: FontWeight.w400, // Regular
-                                color: Color(0xFFD90000), // Red color
+                                color: isLightTheme
+                                    ? SBUColors.errorMain
+                                    : SBUColors.errorLight,
                                 letterSpacing: -0.3,
                                 height: 1.0,
                               ),
@@ -151,11 +172,19 @@ class _SBUChannelOptionsDialogState extends State<SBUChannelOptionsDialog> {
                         // Delete icon - 17x17px positioned at y=10.5
                         Padding(
                           padding: const EdgeInsets.only(top: 10.5),
-                          child: Image.asset(
-                            'assets/icons/ic_delete.png',
-                            width: 17,
-                            height: 17,
-                            package: 'sendbird_uikit',
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              isLightTheme
+                                  ? Colors.transparent
+                                  : SBUColors.errorLight,
+                              isLightTheme ? BlendMode.dst : BlendMode.srcIn,
+                            ),
+                            child: Image.asset(
+                              'assets/icons/ic_delete.png',
+                              width: 17,
+                              height: 17,
+                              package: 'sendbird_uikit',
+                            ),
                           ),
                         ),
                       ],
