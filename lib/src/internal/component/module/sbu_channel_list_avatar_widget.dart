@@ -1,10 +1,12 @@
 // Copyright (c) 2024 Sendbird, Inc. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
+import 'package:sendbird_uikit/sendbird_uikit.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_image_component.dart';
 
-/// Custom avatar widget for channel list items with white background and rounded square shape
+/// Custom avatar widget for channel list items with theme-aware background and rounded square shape
 class SBUChannelListAvatarWidget extends StatelessWidget {
   final GroupChannel channel;
   final double size;
@@ -17,14 +19,20 @@ class SBUChannelListAvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLightTheme = context.watch<SBUThemeProvider>().isLight();
+
     // Get the cover image URL or first member's profile URL
     String? imageUrl = _getImageUrl();
+
+    // Use theme-aware background color from SBUColors
+    final backgroundColor =
+        isLightTheme ? SBUColors.background50 : SBUColors.background500;
 
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: Colors.white, // White background as per Figma design
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(4), // 4px rounded corners
       ),
       clipBehavior: Clip.antiAlias,
@@ -33,7 +41,7 @@ class SBUChannelListAvatarWidget extends StatelessWidget {
               imageUrl: imageUrl,
               cacheKey: imageUrl,
             )
-          : _buildPlaceholder(),
+          : _buildPlaceholder(isLightTheme),
     );
   }
 
@@ -59,14 +67,14 @@ class SBUChannelListAvatarWidget extends StatelessWidget {
     return null;
   }
 
-  Widget _buildPlaceholder() {
-    // Simple gray placeholder when no image is available
+  Widget _buildPlaceholder(bool isLightTheme) {
+    // Theme-aware placeholder using SBUColors
     return Container(
-      color: const Color(0xFFE0E0E0),
-      child: const Center(
+      color: isLightTheme ? SBUColors.background200 : SBUColors.background400,
+      child: Center(
         child: Icon(
           Icons.image_outlined,
-          color: Color(0xFF9E9E9E),
+          color: SBUColors.background300,
           size: 32,
         ),
       ),
