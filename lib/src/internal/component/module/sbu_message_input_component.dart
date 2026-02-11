@@ -10,7 +10,7 @@ import 'package:sendbird_uikit/sendbird_uikit.dart';
 import 'package:sendbird_uikit/src/internal/component/base/sbu_base_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_bottom_sheet_menu_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_file_message_icon_component.dart';
-import 'package:sendbird_uikit/src/internal/component/basic/sbu_icon_button_component.dart';
+import 'package:sendbird_uikit/src/internal/component/basic/sbu_file_multiple_files_message_icon_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_icon_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_text_button_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_text_component.dart';
@@ -36,6 +36,7 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
   final textFieldFocusNode = FocusNode();
 
   bool showSendButton = false;
+
   bool isEditingMessage = false;
   BaseMessage? preEditingMessage;
 
@@ -46,9 +47,7 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
 
     runZonedGuarded(() {
       final collectionProvider = SBUMessageCollectionProvider();
-      final collection =
-          collectionProvider.getCollection(widget.messageCollectionNo);
-
+      final collection = collectionProvider.getCollection(widget.messageCollectionNo);
       collection?.channel.endTyping();
     }, (error, stack) {
       // TODO: Check error
@@ -65,15 +64,12 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
     final strings = context.watch<SBUStringProvider>().strings;
 
     final collectionProvider = SBUMessageCollectionProvider();
-    final collection =
-        collectionProvider.getCollection(widget.messageCollectionNo)!; // Check
+    final collection = collectionProvider.getCollection(widget.messageCollectionNo)!;
 
-    final editingMessage =
-        collectionProvider.getEditingMessage(widget.messageCollectionNo);
+    final editingMessage = collectionProvider.getEditingMessage(widget.messageCollectionNo);
+    final replyingToMessage = collectionProvider.getReplyingToMessage(widget.messageCollectionNo);
 
-    final replyingToMessage =
-        collectionProvider.getReplyingToMessage(widget.messageCollectionNo);
-
+    // Editing mode handling
     if (editingMessage != null) {
       textFieldFocusNode.requestFocus();
 
@@ -81,8 +77,7 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
         isEditingMessage = true;
       }
 
-      if (preEditingMessage == null ||
-          preEditingMessage?.messageId != editingMessage.messageId) {
+      if (preEditingMessage == null || preEditingMessage?.messageId != editingMessage.messageId) {
         textEditingController.text = editingMessage.message;
         preEditingMessage = editingMessage;
       }
@@ -94,6 +89,7 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
       }
     }
 
+    // Reply mode focus
     if (replyingToMessage != null) {
       textFieldFocusNode.requestFocus();
     }
@@ -105,30 +101,49 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
     final amIFrozen = widget.amIFrozen(channel);
     final isDisabled = widget.isDisabled(channel);
 
+    // Reply preview text (NEW SDK feature: MultipleFilesMessage support)
+    String replyingToMessageText = '';
+    if (replyingToMessage != null) {
+      if (replyingToMessage is FileMessage) {
+        replyingToMessageText = replyingToMessage.name ?? '';
+      } else if (replyingToMessage is MultipleFilesMessage) {
+        if (replyingToMessage.files.isNotEmpty) {
+          final count = replyingToMessage.files.length;
+          replyingToMessageText = strings.photos(count.toString());
+        }
+      } else {
+        replyingToMessageText = replyingToMessage.message;
+      }
+    }
+
     final sender = Container(
       color: backgroundColor,
       child: Material(
         color: Colors.transparent,
         child: Padding(
-          padding:
-              const EdgeInsets.only(left: 12, top: 10, right: 12, bottom: 10),
+          padding: const EdgeInsets.only(left: 12, top: 10, right: 12, bottom: 10),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Replying preview (merged: keep your layout + add new SDK icons & text logic)
               if (replyingToMessage != null)
                 Padding(
-                  padding: const EdgeInsets.only(
-                      left: 6, top: 2, right: 4, bottom: 12),
+                  padding: const EdgeInsets.only(left: 6, top: 2, right: 4, bottom: 12),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (replyingToMessage.messageType == MessageType.file)
+                      if (replyingToMessage is FileMessage || replyingToMessage is MultipleFilesMessage)
                         Padding(
                           padding: const EdgeInsets.only(right: 8),
-                          child: SBUFileMessageIconComponent(
+                          child: (replyingToMessage is FileMessage)
+                              ? SBUFileMessageIconComponent(
                             iconSize: 32,
-                            fileMessage: replyingToMessage as FileMessage,
+                            fileMessage: replyingToMessage,
+                          )
+                              : SBUMultipleFilesMessageIconComponent(
+                            iconSize: 32,
+                            multipleFilesMessage: replyingToMessage as MultipleFilesMessage,
                           ),
                         ),
                       Expanded(
@@ -136,16 +151,13 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SBUTextComponent(
-                              text: strings.replyTo(widget.getNickname(
-                                  replyingToMessage.sender, strings)),
+                              text: strings.replyTo(widget.getNickname(replyingToMessage.sender, strings)),
                               textType: SBUTextType.caption1,
                               textColorType: SBUTextColorType.text01,
                             ),
                             const SizedBox(height: 8),
                             SBUTextComponent(
-                              text: (replyingToMessage is FileMessage)
-                                  ? replyingToMessage.name ?? ''
-                                  : replyingToMessage.message,
+                              text: replyingToMessageText,
                               textType: SBUTextType.caption2,
                               textColorType: SBUTextColorType.text03,
                             ),
@@ -153,21 +165,12 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      SBUIconButtonComponent(
-                        iconButtonSize: 24,
-                        icon: SBUIconComponent(
-                          iconSize: 16,
-                          iconData: SBUIcons.close,
-                          iconColor: isLightTheme
-                              ? SBUColors.lightThemeTextHighEmphasis
-                              : SBUColors.darkThemeTextHighEmphasis,
-                        ),
-                        onButtonClicked: () {
+                      InkWell(
+                        onTap: () {
                           showSendButton = false;
                           textEditingController.clear();
                           textFieldFocusNode.unfocus();
-                          SBUMessageCollectionProvider().resetMessageInputMode(
-                              widget.messageCollectionNo);
+                          SBUMessageCollectionProvider().resetMessageInputMode(widget.messageCollectionNo);
 
                           runZonedGuarded(() {
                             channel.endTyping();
@@ -175,10 +178,19 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                             // TODO: Check error
                           });
                         },
+                        child: Icon(
+                          Icons.close,
+                          size: 20,
+                          color: isLightTheme
+                              ? SBUColors.lightThemeTextHighEmphasis
+                              : SBUColors.darkThemeTextHighEmphasis,
+                        ),
                       ),
                     ],
                   ),
                 ),
+
+              // Main row (merged: keep your custom attach/send UI + add new SDK menu features)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: Row(
@@ -187,173 +199,79 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                     widget.canGetFile() == false
                         ? Container()
                         : (isDisabled
-                            ? Padding(
-                                padding: const EdgeInsets.only(right: 12),
-                                child: SBUIconComponent(
-                                  iconSize: 24,
-                                  iconData: SBUIcons.add,
-                                  iconColor: isLightTheme
-                                      ? SBUColors.lightThemeTextDisabled
-                                      : SBUColors.darkThemeTextDisabled,
-                                ),
-                              )
-                            : editingMessage == null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(right: 8),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        widget.unfocus();
-                                        await showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              topRight: Radius.circular(8),
-                                            ),
-                                          ),
-                                          builder: (context) {
-                                            return SBUBottomSheetMenuComponent(
-                                              iconNames: [
-                                                if (widget.canTakePhoto())
-                                                  SBUIcons.camera,
-                                                if (widget.canTakeVideo())
-                                                  SBUIcons.camera,
-                                                if (widget.canChooseMedia())
-                                                  SBUIcons.photo,
-                                                if (widget.canChooseDocument())
-                                                  SBUIcons.document,
-                                              ],
-                                              buttonNames: [
-                                                if (widget.canTakePhoto())
-                                                  strings.takePhoto,
-                                                if (widget.canTakeVideo())
-                                                  strings.takeVideo,
-                                                if (widget.canChooseMedia())
-                                                  strings.gallery,
-                                                if (widget.canChooseDocument())
-                                                  strings.document,
-                                              ],
-                                              onButtonClicked:
-                                                  (buttonName) async {
-                                                FileInfo? fileInfo;
-                                                if (buttonName ==
-                                                    strings.takePhoto) {
-                                                  fileInfo =
-                                                      await SendbirdUIKit()
-                                                          .takePhoto!();
-                                                } else if (buttonName ==
-                                                    strings.takeVideo) {
-                                                  fileInfo =
-                                                      await SendbirdUIKit()
-                                                          .takeVideo!();
-                                                } else if (buttonName ==
-                                                    strings.gallery) {
-                                                  fileInfo =
-                                                      await SendbirdUIKit()
-                                                          .chooseMedia!();
-                                                } else if (buttonName ==
-                                                    strings.document) {
-                                                  fileInfo =
-                                                      await SendbirdUIKit()
-                                                          .chooseDocument!();
-                                                }
+                        ? Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: SBUIconComponent(
+                        iconSize: 24,
+                        iconData: SBUIcons.add,
+                        iconColor: isLightTheme
+                            ? SBUColors.lightThemeTextDisabled
+                            : SBUColors.darkThemeTextDisabled,
+                      ),
+                    )
+                        : editingMessage == null
+                        ? Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: InkWell(
+                        onTap: () async {
+                          widget.unfocus();
+                          await showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                topRight: Radius.circular(8),
+                              ),
+                            ),
+                            builder: (context) {
+                              return SBUBottomSheetMenuComponent(
+                                iconNames: [
+                                  if (widget.canTakePhoto()) SBUIcons.camera,
+                                  if (widget.canTakeVideo()) SBUIcons.camera,
+                                  if (widget.canChooseMedia()) SBUIcons.photo,
+                                  if (widget.canChooseDocument()) SBUIcons.document,
+                                  // NEW SDK: chooseFiles (multiple)
+                                  if (widget.canChooseFiles()) SBUIcons.document,
+                                ],
+                                buttonNames: [
+                                  if (widget.canTakePhoto()) strings.takePhoto,
+                                  if (widget.canTakeVideo()) strings.takeVideo,
+                                  if (widget.canChooseMedia()) strings.gallery,
+                                  if (widget.canChooseDocument()) strings.document,
+                                  // NEW SDK: chooseFiles (multiple)
+                                  if (widget.canChooseFiles()) strings.files,
+                                ],
+                                onButtonClicked: (buttonName) async {
+                                  await _menuButtonClicked(
+                                    isLightTheme: isLightTheme,
+                                    strings: strings,
+                                    channel: channel,
+                                    buttonName: buttonName,
+                                    replyingToMessage: replyingToMessage,
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
+                        child: SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: Image.asset(
+                            'assets/icons/ic_attach.png',
+                            package: 'sendbird_uikit',
+                            width: 40,
+                            height: 40,
+                            color: isLightTheme
+                                ? SBUColors.lightThemeTextHighEmphasis
+                                : SBUColors.background50,
+                          ),
+                        ),
+                      ),
+                    )
+                        : Container()),
 
-                                                if (fileInfo != null) {
-                                                  try {
-                                                    if (kIsWeb) {
-                                                      if (fileInfo.fileBytes !=
-                                                          null) {
-                                                        channel.sendFileMessage(
-                                                          FileMessageCreateParams
-                                                              .withFileBytes(
-                                                            fileInfo.fileBytes!,
-                                                            fileName: fileInfo
-                                                                .fileName,
-                                                            replyToChannel:
-                                                                (replyingToMessage !=
-                                                                    null),
-                                                            parentMessageId:
-                                                                replyingToMessage
-                                                                    ?.messageId,
-                                                          )..thumbnailSizes = [
-                                                              widget
-                                                                  .getThumbnailSize()
-                                                            ],
-                                                        );
-                                                      }
-                                                    } else {
-                                                      if (fileInfo.file !=
-                                                          null) {
-                                                        channel.sendFileMessage(
-                                                          FileMessageCreateParams
-                                                              .withFile(
-                                                            fileInfo.file!,
-                                                            fileName: fileInfo
-                                                                .fileName,
-                                                            replyToChannel:
-                                                                (replyingToMessage !=
-                                                                    null),
-                                                            parentMessageId:
-                                                                replyingToMessage
-                                                                    ?.messageId,
-                                                          )..thumbnailSizes = [
-                                                              widget
-                                                                  .getThumbnailSize()
-                                                            ],
-                                                        );
-                                                      }
-                                                    }
-                                                  } catch (e) {
-                                                    if (e
-                                                        is FileSizeLimitExceededException) {
-                                                      final uploadSizeLimit =
-                                                          SendbirdChat
-                                                                  .getAppInfo()
-                                                              ?.uploadSizeLimit;
-                                                      if (uploadSizeLimit !=
-                                                          null) {
-                                                        widget.showToast(
-                                                          isLightTheme:
-                                                              isLightTheme,
-                                                          text: strings
-                                                              .theMaximumSizePerFileIsMB(
-                                                                  uploadSizeLimit
-                                                                      .toString()),
-                                                          isError: true,
-                                                        );
-                                                      }
-                                                    } else {
-                                                      // TODO: Check error
-                                                    }
-                                                  } finally {
-                                                    SBUMessageCollectionProvider()
-                                                        .resetMessageInputMode(
-                                                            widget
-                                                                .messageCollectionNo);
-                                                  }
-                                                }
-                                              },
-                                            );
-                                          },
-                                        );
-                                      },
-                                      child: SizedBox(
-                                        width: 40,
-                                        height: 40,
-                                        child: Image.asset(
-                                          'assets/icons/ic_attach.png',
-                                          package: 'sendbird_uikit',
-                                          width: 40,
-                                          height: 40,
-                                          color: isLightTheme
-                                              ? SBUColors.lightThemeTextHighEmphasis
-                                              : SBUColors.background50,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : Container()),
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
@@ -361,26 +279,23 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                           color: isLightTheme ? const Color(0xFFF7F7F7) : SBUColors.overlayDark,
                           border: isLightTheme
                               ? Border.all(
-                                  color: const Color(0xFFE9E9E9),
-                                  width: 1,
-                                )
+                            color: const Color(0xFFE9E9E9),
+                            width: 1,
+                          )
                               : null,
                         ),
                         alignment: AlignmentDirectional.centerStart,
                         child: TextField(
                           controller: textEditingController,
                           decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.only(
-                                left: 16, top: 8, right: 16, bottom: 8),
+                            contentPadding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
                             border: InputBorder.none,
                             isCollapsed: true,
                             hintText: amIFrozen
                                 ? strings.chatIsUnavailableInThisChannel
                                 : (amIMuted
-                                    ? strings.youAreMuted
-                                    : (replyingToMessage != null
-                                        ? strings.replyToMessage
-                                        : strings.enterMessage)),
+                                ? strings.youAreMuted
+                                : (replyingToMessage != null ? strings.replyToMessage : strings.enterMessage)),
                             hintStyle: SBUTextStyles.getTextStyle(
                               theme: theme,
                               textType: SBUTextType.body3,
@@ -393,16 +308,15 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                             textType: SBUTextType.body4,
                             textColorType: SBUTextColorType.text01,
                           ).copyWith(
-                              color: isLightTheme
-                                  ? SBUColors.lightThemeTextHighEmphasis
-                                  : SBUColors.darkThemeTextHighEmphasis),
+                            color: isLightTheme
+                                ? SBUColors.lightThemeTextHighEmphasis
+                                : SBUColors.darkThemeTextHighEmphasis,
+                          ),
                           cursorWidth: 1,
                           cursorHeight: 20,
-                          cursorColor: isLightTheme
-                              ? SBUColors.primaryMain
-                              : SBUColors.primaryLight,
+                          cursorColor: isLightTheme ? SBUColors.primaryMain : SBUColors.primaryLight,
                           minLines: 1,
-                          maxLines: 4,
+                          maxLines: 4, // keep your enhancement
                           keyboardType: TextInputType.multiline,
                           focusNode: textFieldFocusNode,
                           onChanged: (text) {
@@ -429,9 +343,10 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                         ),
                       ),
                     ),
-                    // Fix a bug like `ㄱㅏ` on web temporarily.
-                    if (kIsWeb && (!showSendButton || editingMessage != null))
-                      const SizedBox(width: 40),
+
+                    // Fix a bug like ㄱㅏ on web temporarily.
+                    if (kIsWeb && (!showSendButton || editingMessage != null)) const SizedBox(width: 40),
+
                     if (showSendButton && editingMessage == null)
                       Padding(
                         padding: const EdgeInsets.only(left: 8),
@@ -456,9 +371,7 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                               );
 
                               textEditingController.clear();
-                              SBUMessageCollectionProvider()
-                                  .resetMessageInputMode(
-                                      widget.messageCollectionNo);
+                              SBUMessageCollectionProvider().resetMessageInputMode(widget.messageCollectionNo);
 
                               runZonedGuarded(() {
                                 channel.endTyping();
@@ -482,6 +395,8 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                   ],
                 ),
               ),
+
+              // Editing actions (keep as-is)
               if (editingMessage != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
@@ -499,8 +414,7 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                           showSendButton = false;
                           textEditingController.clear();
                           textFieldFocusNode.unfocus();
-                          SBUMessageCollectionProvider().resetMessageInputMode(
-                              widget.messageCollectionNo);
+                          SBUMessageCollectionProvider().resetMessageInputMode(widget.messageCollectionNo);
 
                           runZonedGuarded(() {
                             channel.endTyping();
@@ -512,9 +426,7 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                       ),
                       SBUTextButtonComponent(
                         height: 32,
-                        backgroundColor: isLightTheme
-                            ? SBUColors.primaryMain
-                            : SBUColors.primaryLight,
+                        backgroundColor: isLightTheme ? SBUColors.primaryMain : SBUColors.primaryLight,
                         text: SBUTextComponent(
                           text: strings.save,
                           textType: SBUTextType.button,
@@ -524,17 +436,13 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                           runZonedGuarded(() async {
                             await channel.updateUserMessage(
                               editingMessage.messageId,
-                              UserMessageUpdateParams(
-                                message: textEditingController.text,
-                              ),
+                              UserMessageUpdateParams(message: textEditingController.text),
                             );
 
                             showSendButton = false;
                             textEditingController.clear();
                             textFieldFocusNode.unfocus();
-                            SBUMessageCollectionProvider()
-                                .resetMessageInputMode(
-                                    widget.messageCollectionNo);
+                            SBUMessageCollectionProvider().resetMessageInputMode(widget.messageCollectionNo);
                           }, (error, stack) {
                             // TODO: Check error
                           });
@@ -557,5 +465,130 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
     );
 
     return sender;
+  }
+
+  // NEW SDK feature merge:
+  // - Supports chooseFiles() (multiple)
+  // - Uses widget.sendFileMessage / widget.sendMultipleFilesMessage (handles web/mobile + thumbnails)
+  Future<void> _menuButtonClicked({
+    required bool isLightTheme,
+    required SBUStrings strings,
+    required GroupChannel channel,
+    required String buttonName,
+    BaseMessage? replyingToMessage,
+  }) async {
+    FileInfo? fileInfo;
+    List<FileInfo>? fileInfoList;
+
+    if (buttonName == strings.takePhoto) {
+      fileInfo = await SendbirdUIKit().takePhoto!();
+    } else if (buttonName == strings.takeVideo) {
+      fileInfo = await SendbirdUIKit().takeVideo!();
+    } else if (buttonName == strings.gallery) {
+      fileInfo = await SendbirdUIKit().chooseMedia!();
+    } else if (buttonName == strings.document) {
+      fileInfo = await SendbirdUIKit().chooseDocument!();
+    } else if (buttonName == strings.files) {
+      fileInfoList = await SendbirdUIKit().chooseFiles!();
+      if (fileInfoList.length == 1) {
+        fileInfo = fileInfoList[0];
+      }
+    }
+
+    // Single file
+    if (fileInfo != null) {
+      try {
+        widget.sendFileMessage(
+          channel: channel,
+          fileInfo: fileInfo,
+          replyingToMessage: replyingToMessage,
+          thumbnailSizes: [widget.getThumbnailSize()],
+        );
+      } catch (e) {
+        if (e is FileSizeLimitExceededException) {
+          final uploadSizeLimit = SendbirdChat.getAppInfo()?.uploadSizeLimit;
+          if (uploadSizeLimit != null) {
+            widget.showToast(
+              isLightTheme: isLightTheme,
+              text: strings.theMaximumSizePerFileIsMB(uploadSizeLimit.toString()),
+              isError: true,
+            );
+          }
+        } else {
+          // TODO: Check error
+        }
+      } finally {
+        SBUMessageCollectionProvider().resetMessageInputMode(widget.messageCollectionNo);
+      }
+    }
+    // Multiple files
+    else if (fileInfoList != null && fileInfoList.isNotEmpty) {
+      final List<UploadableFileInfo> uploadableFileInfoList = [];
+
+      for (final fi in fileInfoList) {
+        if (kIsWeb) {
+          if (fi.fileBytes != null) {
+            final uploadable = UploadableFileInfo.fromFileBytes(
+              fileBytes: fi.fileBytes!,
+              fileName: fi.fileName,
+            )..thumbnailSizes = [widget.getThumbnailSize()];
+            uploadableFileInfoList.add(uploadable);
+          }
+        } else {
+          if (fi.file != null) {
+            final uploadable = UploadableFileInfo.fromFile(
+              file: fi.file!,
+              fileName: fi.fileName,
+            )..thumbnailSizes = [widget.getThumbnailSize()];
+            uploadableFileInfoList.add(uploadable);
+          }
+        }
+      }
+
+      if (uploadableFileInfoList.isNotEmpty) {
+        runZonedGuarded(() {
+          widget.sendMultipleFilesMessage(
+            channel: channel,
+            params: MultipleFilesMessageCreateParams(uploadableFileInfoList)
+              ..replyToChannel = (replyingToMessage != null)
+              ..parentMessageId = replyingToMessage?.messageId,
+            fileUploadHandler: (requestId, index, uploadableFileInfo, error) {
+              if (error == null) {
+                SBUMessageCollectionProvider().notifyFileUploadCompleted(
+                  widget.messageCollectionNo,
+                  requestId,
+                  index,
+                );
+              }
+            },
+            replyingToMessage: replyingToMessage,
+          );
+        }, (e, s) {
+          if (e is FileSizeLimitExceededException) {
+            final uploadSizeLimit = SendbirdChat.getAppInfo()?.uploadSizeLimit;
+            if (uploadSizeLimit != null) {
+              widget.showToast(
+                isLightTheme: isLightTheme,
+                text: strings.theMaximumSizePerFileIsMB(uploadSizeLimit.toString()),
+                isError: true,
+              );
+            }
+          } else if (e is InvalidParameterException) {
+            final fileCountLimit = SendbirdChat.getAppInfo()?.multipleFilesMessageFileCountLimit;
+            if (fileCountLimit != null && (fileInfoList?.length ?? 0) > fileCountLimit) {
+              widget.showToast(
+                isLightTheme: isLightTheme,
+                text: strings.upToFilesCanBeAttached(fileCountLimit.toString()),
+                isError: true,
+              );
+            }
+          } else {
+            // TODO: Check error
+          }
+        });
+      }
+
+      SBUMessageCollectionProvider().resetMessageInputMode(widget.messageCollectionNo);
+    }
   }
 }
