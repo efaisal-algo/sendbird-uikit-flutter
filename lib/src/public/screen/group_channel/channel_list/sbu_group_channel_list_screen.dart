@@ -331,26 +331,40 @@ class SBUGroupChannelListScreenState extends State<SBUGroupChannelListScreen>
                       ))
                 : list ?? widget.getDefaultContainer(isLightTheme));
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        collection == null
-            ? widget.getDefaultContainer(isLightTheme)
-            : widget.customHeader != null
-                ? widget.customHeader!(
-                    context,
-                    theme,
-                    strings,
-                    collection,
-                  )
-                : header,
-        Expanded(
-          child: widget.getDefaultContainer(
-            isLightTheme,
-            child: body,
+    return Container(
+      color: isLightTheme
+          ? const Color(0xFFF4F4F4) // Figma design background color
+          : SBUColors.background600, // Keep dark theme as is
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          collection == null
+              ? widget.getDefaultContainer(isLightTheme)
+              : widget.customHeader != null
+                  ? widget.customHeader!(
+                      context,
+                      theme,
+                      strings,
+                      collection,
+                    )
+                  : header,
+          // Divider line between header and content
+          Container(
+            height: 1,
+            color: isLightTheme
+                ? const Color(0xFFE0E0E0) // Light divider color
+                : SBUColors.darkThemeTextDisabled,
           ),
-        ),
-      ],
+          Expanded(
+            child: Container(
+              color: isLightTheme
+                  ? const Color(0xFFF4F4F4) // Figma design background color
+                  : SBUColors.background600, // Keep dark theme as is
+              child: body,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

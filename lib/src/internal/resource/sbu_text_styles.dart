@@ -4,6 +4,13 @@ import 'package:flutter/painting.dart';
 import 'package:sendbird_uikit/src/public/resource/sbu_colors.dart';
 import 'package:sendbird_uikit/src/public/resource/sbu_theme_provider.dart';
 
+/// Merge result:
+/// - Keeps YOUR typography system (SfProText + your sizes/weights/letterSpacing/heights)
+/// - Adds Sendbird NEW feature: SBUTextType.body3Bold
+/// - Keeps YOUR extra text types: body4
+/// - Keeps YOUR extra color types: newMessage / otherNewMessage
+/// - Keeps Sendbird enums order/compatibility as much as possible
+
 enum SBUTextType {
   heading1,
   heading2,
@@ -12,7 +19,8 @@ enum SBUTextType {
   body1,
   body2,
   body3,
-  body3Bold,
+  body3Bold, // ✅ New from Sendbird
+  body4, // ✅ Your enhancement
   button,
   caption1,
   caption2,
@@ -35,155 +43,130 @@ enum SBUTextColorType {
   messageDate, // [light] darkThemeTextHighEmphasis, [dark] darkThemeTextMidEmphasis
   information, // [light] lightThemeTextHighEmphasis, [dark] lightThemeTextHighEmphasis
   disabled, // [light] lightThemeTextDisabled, [dark] darkThemeTextDisabled
+
+  // ✅ Your enhancements
+  newMessage, // [light] white-ish, [dark] white-ish (your custom colors)
+  otherNewMessage, // [light] white-ish, [dark] white-ish (your custom colors)
 }
 
 class SBUTextStyles {
-  static String fontFamily = 'Roboto';
+  /// ✅ Keep your font
+  static String fontFamily = 'SfProText';
 
   static TextStyle getTextStyle({
     required SBUTheme theme,
     required SBUTextType textType,
     required SBUTextColorType textColorType,
   }) {
-    final color = _getTextColor(
-      theme: theme,
-      textColorType: textColorType,
-    );
+    final color = _getTextColor(theme: theme, textColorType: textColorType);
 
     switch (textType) {
       case SBUTextType.heading1:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w500,
-          fontSize: 18,
-          height: 1.111,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          height: 32 / 24,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
+
       case SBUTextType.heading2:
-        return TextStyle(
-          fontFamily: fontFamily,
-          fontWeight: FontWeight.w700,
-          fontSize: 16,
-          height: 1.25,
-          letterSpacing: -0.2,
-          color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
-        );
       case SBUTextType.subtitle1:
         return TextStyle(
           fontFamily: fontFamily,
+          fontSize: 18.0,
           fontWeight: FontWeight.w500,
-          fontSize: 16,
-          height: 1.375,
-          letterSpacing: -0.2,
+          height: 27 / 18,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
+
       case SBUTextType.subtitle2:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 16,
-          height: 1.5,
-          letterSpacing: -0.2,
+          fontSize: 18.0,
+          fontWeight: FontWeight.normal,
+          height: 27 / 18,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
+
       case SBUTextType.body1:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 16,
-          height: 1.25,
+          fontSize: 16.0,
+          fontWeight: FontWeight.normal,
+          height: 21 / 14,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
+
       case SBUTextType.body2:
         return TextStyle(
           fontFamily: fontFamily,
+          fontSize: 16.0,
           fontWeight: FontWeight.w500,
-          fontSize: 14,
-          height: 1.142,
+          height: 21 / 14,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
+
       case SBUTextType.body3:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-          height: 1.428,
+          fontSize: 14.0,
+          fontWeight: FontWeight.normal,
+          height: 21 / 14,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
+
+    // ✅ NEW from Sendbird, but using your font + sizing system
+    // Keeping it aligned with body3 but bold.
       case SBUTextType.body3Bold:
         return TextStyle(
           fontFamily: fontFamily,
+          fontSize: 14.0,
           fontWeight: FontWeight.w700,
-          fontSize: 14,
-          height: 1.428,
+          height: 21 / 14,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
+
+    // ✅ Your enhancement (used in your message input)
+      case SBUTextType.body4:
+        return TextStyle(
+          fontFamily: fontFamily,
+          fontSize: 15.0,
+          height: 21 / 16,
+          fontWeight: FontWeight.normal,
+          letterSpacing: -0.8,
+          color: color,
+        );
+
+    // You had button mapped like body2; keep it exactly
       case SBUTextType.button:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w700,
-          fontSize: 14,
-          height: 1.142,
-          letterSpacing: 0.4,
+          fontSize: 16.0,
+          fontWeight: FontWeight.w500,
+          height: 21 / 14,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
+
       case SBUTextType.caption1:
-        return TextStyle(
-          fontFamily: fontFamily,
-          fontWeight: FontWeight.w700,
-          fontSize: 12,
-          height: 1,
-          color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
-        );
       case SBUTextType.caption2:
-        return TextStyle(
-          fontFamily: fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 12,
-          height: 1,
-          color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
-        );
       case SBUTextType.caption3:
-        return TextStyle(
-          fontFamily: fontFamily,
-          fontWeight: FontWeight.w700,
-          fontSize: 11,
-          height: 1.090,
-          color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
-        );
       case SBUTextType.caption4:
         return TextStyle(
           fontFamily: fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 11,
-          height: 1.090,
+          fontSize: 12.0,
+          fontWeight: FontWeight.normal,
+          height: 15.6 / 12,
+          letterSpacing: -0.8,
           color: color,
-          decorationThickness: 0,
-          leadingDistribution: TextLeadingDistribution.even,
         );
     }
   }
@@ -200,6 +183,7 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.primaryLight;
         }
+
       case SBUTextColorType.secondary:
         switch (theme) {
           case SBUTheme.light:
@@ -207,6 +191,7 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.secondaryLight;
         }
+
       case SBUTextColorType.error:
         switch (theme) {
           case SBUTheme.light:
@@ -214,6 +199,7 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.errorLight;
         }
+
       case SBUTextColorType.text01:
         switch (theme) {
           case SBUTheme.light:
@@ -221,6 +207,7 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.darkThemeTextHighEmphasis;
         }
+
       case SBUTextColorType.text02:
         switch (theme) {
           case SBUTheme.light:
@@ -228,6 +215,7 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.darkThemeTextMidEmphasis;
         }
+
       case SBUTextColorType.text03:
         switch (theme) {
           case SBUTheme.light:
@@ -235,6 +223,7 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.darkThemeTextLowEmphasis;
         }
+
       case SBUTextColorType.text04:
         switch (theme) {
           case SBUTheme.light:
@@ -242,6 +231,7 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.darkThemeTextDisabled;
         }
+
       case SBUTextColorType.badge:
       case SBUTextColorType.message:
       case SBUTextColorType.toast:
@@ -251,6 +241,7 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.lightThemeTextHighEmphasis;
         }
+
       case SBUTextColorType.messageEdited:
         switch (theme) {
           case SBUTheme.light:
@@ -258,6 +249,7 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.lightThemeTextMidEmphasis;
         }
+
       case SBUTextColorType.messageDate:
         switch (theme) {
           case SBUTheme.light:
@@ -265,6 +257,7 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.darkThemeTextMidEmphasis;
         }
+
       case SBUTextColorType.information:
         switch (theme) {
           case SBUTheme.light:
@@ -272,12 +265,30 @@ class SBUTextStyles {
           case SBUTheme.dark:
             return SBUColors.lightThemeTextHighEmphasis;
         }
+
       case SBUTextColorType.disabled:
         switch (theme) {
           case SBUTheme.light:
             return SBUColors.lightThemeTextDisabled;
           case SBUTheme.dark:
             return SBUColors.darkThemeTextDisabled;
+        }
+
+    // ✅ Your custom colors (kept exactly)
+      case SBUTextColorType.newMessage:
+        switch (theme) {
+          case SBUTheme.light:
+            return SBUColors.lightThemeNewMssage;
+          case SBUTheme.dark:
+            return SBUColors.lightThemeNewMssage;
+        }
+
+      case SBUTextColorType.otherNewMessage:
+        switch (theme) {
+          case SBUTheme.light:
+            return SBUColors.lightThemeOtherNewMssage;
+          case SBUTheme.dark:
+            return SBUColors.darkThemeOtherNewMssage;
         }
     }
   }

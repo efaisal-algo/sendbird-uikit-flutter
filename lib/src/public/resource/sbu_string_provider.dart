@@ -236,9 +236,9 @@ class SBUStrings {
     // GroupChannel list
     channels: 'Channels',
     yesterday: 'Yesterday',
-    turnPushNotificationOff: 'Turn push notification off',
-    turnPushNotificationOn: 'Turn push notification on',
-    leaveChannel: 'Leave channel',
+    turnPushNotificationOff: 'Turn notification off',
+    turnPushNotificationOn: 'Turn notification on',
+    leaveChannel: 'Delete and leave chat',
     noMembers: '(No members)',
     isTyping: (user) => '$user is typing…',
     areTyping: (userA, userB) => '$userA and $userB are typing…',
@@ -316,7 +316,7 @@ class SBUStrings {
     enterName: 'Enter name',
 
     // GroupChannel moderations
-    operators: 'Operators',
+    operators: 'Admins',
     mutedMembers: 'Muted members',
     bannedUsers: 'Banned users',
     freezeChannel: 'Freeze channel',
@@ -326,9 +326,9 @@ class SBUStrings {
 
     // GroupChannel members
     you: 'You',
-    operator: 'Operator',
-    registerAsOperator: 'Register as operator',
-    unregisterOperator: 'Unregister operator',
+    operator: 'Admin',
+    registerAsOperator: 'Register as Admin',
+    unregisterOperator: 'Unregister Admin',
     mute: 'Mute',
     unmute: 'Unmute',
     ban: 'Ban',

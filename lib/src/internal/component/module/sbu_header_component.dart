@@ -22,6 +22,7 @@ class SBUHeaderComponent extends SBUStatefulComponent {
   final SBUTextButtonComponent? textButton;
   final SBUIconButtonComponent? iconButton;
   final GroupChannel? channelForTypingStatus;
+  final bool showDivider;
 
   const SBUHeaderComponent({
     required this.width,
@@ -33,6 +34,7 @@ class SBUHeaderComponent extends SBUStatefulComponent {
     this.textButton,
     this.iconButton,
     this.channelForTypingStatus,
+    this.showDivider = true,
     super.key,
   });
 
@@ -143,7 +145,7 @@ class SBUHeaderComponentState extends State<SBUHeaderComponent> {
       ),
     );
 
-    if (isLightTheme) {
+    if (widget.showDivider) {
       return Stack(
         children: [
           header,
@@ -152,9 +154,12 @@ class SBUHeaderComponentState extends State<SBUHeaderComponent> {
             height: height,
             alignment: Alignment.bottomCenter,
             child: Divider(
-                height: 1,
-                thickness: 1,
-                color: SBUColors.lightThemeTextDisabled),
+              height: 1,
+              thickness: 1,
+              color: isLightTheme
+                  ? const Color(0xFFE0E0E0)
+                  : SBUColors.darkThemeTextDisabled,
+            ),
           ),
         ],
       );

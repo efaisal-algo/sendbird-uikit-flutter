@@ -394,6 +394,7 @@ class SBUGroupChannelScreenState extends State<SBUGroupChannelScreen>
                   )
                 : null,
             channelForTypingStatus: collection.channel,
+            showDivider: false, // Hide divider for group channel screen
           )
         : null;
 

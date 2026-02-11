@@ -160,15 +160,15 @@ class SBUMessageListItemComponentState
                   const EdgeInsets.only(left: 10, top: 4, right: 10, bottom: 4),
               decoration: BoxDecoration(
                 color: isLightTheme
-                    ? SBUColors.overlayLight
+                    ? SBUColors.background100
                     : SBUColors.overlayDark,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SBUTextComponent(
                 text: DateFormat('EEE, MMM dd').format(
                     DateTime.fromMillisecondsSinceEpoch(message.createdAt)),
-                textType: SBUTextType.caption1,
-                textColorType: SBUTextColorType.messageDate,
+                textType: SBUTextType.caption4,
+                textColorType: SBUTextColorType.otherNewMessage,
               ),
             ),
           ),
@@ -639,7 +639,7 @@ class SBUMessageListItemComponentState
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 12, bottom: 2),
+          padding: const EdgeInsets.only(right: 12, bottom: 4),
           child: (isSameMinuteAtNextMessage == false)
               ? Material(
                   color: Colors.transparent,
@@ -669,6 +669,7 @@ class SBUMessageListItemComponentState
                       isLightTheme: isLightTheme,
                       size: 26,
                       user: message.sender,
+                      showBorder: true,
                     ),
                   ),
                 )
@@ -762,7 +763,12 @@ class SBUMessageListItemComponentState
                           color: isLightTheme
                               ? SBUColors.background100
                               : SBUColors.background400,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(16),
+                            topRight: Radius.circular(16),
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(16),
+                          ),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -777,8 +783,9 @@ class SBUMessageListItemComponentState
                                   Flexible(
                                     child: SBUTextComponent(
                                       text: message.message,
-                                      textType: SBUTextType.body3,
-                                      textColorType: SBUTextColorType.text01,
+                                      textType: SBUTextType.body4,
+                                      textColorType:
+                                          SBUTextColorType.otherNewMessage,
                                       textOverflowType: null,
                                       maxLines: null,
                                     ),
@@ -1041,12 +1048,18 @@ class SBUMessageListItemComponentState
                         isMyMessage: true,
                       ) ??
                       Container(
-                        padding: const EdgeInsets.only(top: 7),
+                        padding:
+                            const EdgeInsets.only(top: 10, left: 4, bottom: 2),
                         decoration: BoxDecoration(
                           color: isLightTheme
                               ? SBUColors.primaryMain
                               : SBUColors.primaryLight,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(0),
+                          ),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1061,8 +1074,9 @@ class SBUMessageListItemComponentState
                                   Flexible(
                                     child: SBUTextComponent(
                                       text: message.message,
-                                      textType: SBUTextType.body3,
-                                      textColorType: SBUTextColorType.message,
+                                      textType: SBUTextType.body4,
+                                      textColorType:
+                                          SBUTextColorType.newMessage,
                                       textOverflowType: null,
                                       maxLines: null,
                                     ),
@@ -1133,7 +1147,7 @@ class SBUMessageListItemComponentState
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 12, bottom: 2),
+          padding: const EdgeInsets.only(right: 12, bottom: 4),
           child: (isSameMinuteAtNextMessage == false)
               ? Material(
                   color: Colors.transparent,
@@ -1163,6 +1177,7 @@ class SBUMessageListItemComponentState
                       isLightTheme: isLightTheme,
                       size: 26,
                       user: message.sender,
+                      showBorder: true,
                     ),
                   ),
                 )
@@ -1272,7 +1287,12 @@ class SBUMessageListItemComponentState
                           : isLightTheme
                               ? SBUColors.background100
                               : SBUColors.background400,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(20),
+                      ),
                     ),
                     child: thumbnailWidget != null
                         ? Column(
@@ -1891,7 +1911,12 @@ class SBUMessageListItemComponentState
                       : isLightTheme
                           ? SBUColors.primaryMain
                           : SBUColors.primaryLight,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(0),
+                  ),
                 ),
                 child: thumbnailWidget != null
                     ? Column(
@@ -2450,7 +2475,12 @@ class SBUMessageListItemComponentState
             padding:
                 const EdgeInsets.only(left: 12, top: 6, right: 12, bottom: 12),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(0),
+                bottomRight: Radius.circular(20),
+              ),
               color: isLightTheme
                   ? SBUColors.background100
                   : SBUColors.background400,
@@ -2507,7 +2537,7 @@ class SBUMessageListItemComponentState
                       Container(
                         width: 156,
                         height: 104,
-                        color: const Color(0x00FFFFFF).withOpacity(0.4),
+                        color: SBUColors.overlayLight,
                       ),
                     ],
                   ),
@@ -2517,7 +2547,12 @@ class SBUMessageListItemComponentState
                   padding: const EdgeInsets.only(
                       left: 12, top: 6, right: 12, bottom: 12),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(20),
+                    ),
                     color: isLightTheme
                         ? SBUColors.background100
                         : SBUColors.background400,

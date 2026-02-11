@@ -130,7 +130,7 @@ class SBUDelayedConnectingDialogState
                             text: currentRetryAfter > 0
                                 ? currentRetryAfter.toTimeString()
                                 : '',
-                            textType: SBUTextType.body3Bold,
+                            textType: SBUTextType.body3,
                             textColorType: SBUTextColorType.text02,
                           ),
                         ],

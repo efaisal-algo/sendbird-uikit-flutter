@@ -118,8 +118,30 @@ mixin SBUBaseComponent {
     required bool isLightTheme,
     required double size,
     User? user,
+    bool showBorder = false,
   }) {
     final imageUrl = user?.profileUrl ?? '';
+
+    // Get user initials (first two characters of nickname or userId)
+    String? userInitials;
+    if (user != null) {
+      final name = user.nickname.isNotEmpty ? user.nickname : user.userId;
+      if (name.isNotEmpty) {
+        final trimmedName = name.trim();
+        if (trimmedName.isNotEmpty) {
+          final words = trimmedName.split(' ');
+          if (words.length >= 2) {
+            // Get first char from first two words
+            userInitials = '${words[0][0]}${words[1][0]}'.toUpperCase();
+          } else {
+            // Get first two chars from single word
+            userInitials = trimmedName.length >= 2
+                ? trimmedName.substring(0, 2).toUpperCase()
+                : trimmedName[0].toUpperCase();
+          }
+        }
+      }
+    }
 
     SBUIconComponent? icon = imageUrl.isEmpty
         ? SBUIconComponent(
@@ -130,7 +152,10 @@ mixin SBUBaseComponent {
                 : SBUColors.lightThemeTextHighEmphasis,
           )
         : null;
-    Color? backgroundColor = imageUrl.isEmpty ? SBUColors.background300 : null;
+    // Theme-aware background color for avatars without images
+    Color? backgroundColor = imageUrl.isEmpty
+        ? (isLightTheme ? SBUColors.background300 : SBUColors.background400)
+        : null;
 
     return SBUAvatarComponent(
       width: size,
@@ -139,6 +164,8 @@ mixin SBUBaseComponent {
       backgroundColor: backgroundColor,
       imageUrls: imageUrl.isNotEmpty ? [imageUrl] : [],
       isMutedMember: (user is Member && user.isMuted),
+      userInitials: userInitials,
+      showBorder: showBorder,
     );
   }
 
@@ -175,7 +202,10 @@ mixin SBUBaseComponent {
                 : SBUColors.lightThemeTextHighEmphasis,
           )
         : null;
-    Color? backgroundColor = imageUrls.isEmpty ? SBUColors.background300 : null;
+    // Theme-aware background color for group channel avatars without images
+    Color? backgroundColor = imageUrls.isEmpty
+        ? (isLightTheme ? SBUColors.background300 : SBUColors.background400)
+        : null;
 
     if (channel.isBroadcast) {
       imageUrls.clear();
@@ -275,9 +305,7 @@ mixin SBUBaseComponent {
                 ? SBUIcons.doneAll
                 : SBUIcons.done,
             iconColor: isAllMembersRead
-                ? (isLightTheme
-                    ? SBUColors.secondaryMain
-                    : SBUColors.secondaryLight)
+                ? const Color(0xFFFF7A00) // Figma design orange color
                 : (isLightTheme
                     ? SBUColors.lightThemeTextLowEmphasis
                     : SBUColors.darkThemeTextLowEmphasis),
