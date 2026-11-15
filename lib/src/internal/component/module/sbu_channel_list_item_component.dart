@@ -1,6 +1,6 @@
 // Copyright (c) 2024 Sendbird, Inc. All rights reserved.
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:sendbird_uikit/src/internal/component/base/sbu_base_component.dart';
@@ -8,8 +8,8 @@ import 'package:sendbird_uikit/src/internal/component/basic/sbu_badge_component.
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_file_icon_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_icon_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_text_component.dart';
-import 'package:sendbird_uikit/src/public/resource/sbu_theme_provider.dart';
 import 'package:sendbird_uikit/src/public/resource/sbu_colors.dart';
+import 'package:sendbird_uikit/src/public/resource/sbu_theme_provider.dart';
 
 class SBUChannelListItemComponent extends SBUStatefulComponent {
   final double width;

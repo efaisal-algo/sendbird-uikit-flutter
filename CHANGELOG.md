@@ -1,3 +1,26 @@
+## v1.5.0+algo.1 (Nov 15, 2026) - AlgoDriven fork
+
+### Upstream sync
+- Merged upstream v1.4.1 and v1.5.0 into the fork. All fork customisations
+  (design-system colours, SfProText typography, redesigned message input,
+  avatars with initials/borders, channel options dialog, leave-channel bottom
+  sheet, `customHeader` on `SBUGroupChannelMembersScreen`, `showDivider` on
+  `SBUHeaderComponent`, string overrides) are kept unchanged.
+- Upstream's v1.5.0 send/edit logic (whitespace-only guard and
+  `SBUCustomParamsHandler` hooks) is ported into the fork's redesigned
+  `SBUMessageInputComponent`; its layout and styling are unchanged.
+- The typing indicator keeps `Color.withValues(alpha:)` instead of upstream's
+  deprecated `withOpacity`.
+
+### Flutter 3.50 / material_ui migration
+- `environment`: `sdk: ^3.13.0`, `flutter: ">=3.47.0"`.
+- Added `material_ui: ^1.11.0`; every `package:flutter/material.dart` import is
+  now `package:material_ui/material_ui.dart` (`dart fix --code=migrate_design_widgets`),
+  so the UIKit widgets share the host app's material_ui `Theme`, `Material` and
+  `MaterialLocalizations`. The package does not use cupertino.
+- `cached_network_image` raised to `^4.0.7` (material_ui-based line).
+- Import-only change: no public API, widget signature, UI or flow change.
+
 ## v1.5.0 (Jul 15, 2026)
 
 ### Features

@@ -1,6 +1,6 @@
 // Copyright (c) 2024 Sendbird, Inc. All rights reserved.
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:sendbird_uikit/sendbird_uikit.dart';
 
 void main() async {

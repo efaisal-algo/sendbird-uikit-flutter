@@ -3,20 +3,20 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:sendbird_chat_sdk/sendbird_chat_sdk.dart';
 import 'package:sendbird_uikit/sendbird_uikit.dart';
 import 'package:sendbird_uikit/src/internal/component/base/sbu_base_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_badge_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_channel_options_dialog.dart';
-import 'package:sendbird_uikit/src/internal/component/basic/sbu_leave_channel_bottom_sheet.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_file_icon_component.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_icon_component.dart';
+import 'package:sendbird_uikit/src/internal/component/basic/sbu_leave_channel_bottom_sheet.dart';
 import 'package:sendbird_uikit/src/internal/component/basic/sbu_text_component.dart';
-import 'package:sendbird_uikit/src/internal/component/module/sbu_channel_list_item_component.dart';
 import 'package:sendbird_uikit/src/internal/component/module/sbu_channel_list_avatar_widget.dart';
+import 'package:sendbird_uikit/src/internal/component/module/sbu_channel_list_item_component.dart';
 import 'package:sendbird_uikit/src/internal/resource/sbu_text_styles.dart';
 
 class SBUGroupChannelListItemComponent extends SBUStatefulComponent {
