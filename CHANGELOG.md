@@ -1,3 +1,16 @@
+## v1.5.0 (Jul 15, 2026)
+
+### Features
+- Added `SendbirdUIKit.setCustomParamsHandler()` and `SBUCustomParamsHandler` to customize message params before sending or updating (e.g. trimming outgoing messages)
+
+### Improvements
+- Blank (whitespace-only) messages can no longer be sent or saved as edits
+
+## v1.4.1 (Feb 12, 2026)
+
+### Improvements
+- Fixed bugs regarding message huge gap
+
 ## v1.4.0 (Jan 16, 2026)
 
 ### Features

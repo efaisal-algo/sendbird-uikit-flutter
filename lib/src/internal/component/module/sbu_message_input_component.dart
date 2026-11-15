@@ -321,10 +321,15 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                           focusNode: textFieldFocusNode,
                           onChanged: (text) {
                             if (editingMessage == null) {
-                              if (showSendButton != text.isNotEmpty) {
+                              // Treat whitespace-only input as empty so the send
+                              // button stays disabled (aligns with the other
+                              // platforms). Typing indicator logic below keeps
+                              // using the raw text.
+                              final hasText = text.trim().isNotEmpty;
+                              if (showSendButton != hasText) {
                                 if (mounted) {
                                   setState(() {
-                                    showSendButton = text.isNotEmpty;
+                                    showSendButton = hasText;
                                   });
                                 }
                               }
@@ -352,7 +357,24 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                         padding: const EdgeInsets.only(left: 8),
                         child: InkWell(
                           onTap: () {
-                            if (textEditingController.text.isNotEmpty) {
+                            if (textEditingController.text.trim().isNotEmpty) {
+                              final params = UserMessageCreateParams(
+                                message: textEditingController.text,
+                                replyToChannel: (replyingToMessage != null),
+                                parentMessageId: replyingToMessage?.messageId,
+                              );
+                              SendbirdUIKit()
+                                  .customParamsHandler
+                                  ?.onBeforeSendUserMessage(params);
+
+                              // A custom params handler may have emptied the
+                              // message (e.g. trimming a whitespace-only input).
+                              // sendUserMessage throws InvalidParameterException
+                              // on an empty message, so skip sending here.
+                              if (params.message.isEmpty) {
+                                return;
+                              }
+
                               if (mounted) {
                                 setState(() {
                                   showSendButton = false;
@@ -360,11 +382,7 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                               }
 
                               channel.sendUserMessage(
-                                UserMessageCreateParams(
-                                  message: textEditingController.text,
-                                  replyToChannel: (replyingToMessage != null),
-                                  parentMessageId: replyingToMessage?.messageId,
-                                ),
+                                params,
                                 handler: (message, e) {
                                   // TODO: Check error
                                 },
@@ -433,10 +451,32 @@ class SBUMessageInputComponentState extends State<SBUMessageInputComponent> {
                           textColorType: SBUTextColorType.message,
                         ),
                         onButtonClicked: () async {
+                          // Block saving an edit that is empty after trimming
+                          // (whitespace-only), consistent with the send button
+                          // and the iOS UIKit's save guard.
+                          if (textEditingController.text.trim().isEmpty) {
+                            return;
+                          }
+
                           runZonedGuarded(() async {
+                            final params = UserMessageUpdateParams(
+                              message: textEditingController.text,
+                            );
+                            SendbirdUIKit()
+                                .customParamsHandler
+                                ?.onBeforeUpdateUserMessage(params);
+
+                            // A custom params handler may have emptied the
+                            // message. updateUserMessage does not reject an
+                            // empty message, so skip the update in that case
+                            // (mirrors the send path guard).
+                            if (params.message?.isEmpty ?? true) {
+                              return;
+                            }
+
                             await channel.updateUserMessage(
                               editingMessage.messageId,
-                              UserMessageUpdateParams(message: textEditingController.text),
+                              params,
                             );
 
                             showSendButton = false;

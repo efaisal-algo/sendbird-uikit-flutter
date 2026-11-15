@@ -522,6 +522,8 @@ mixin SBUBaseComponent {
       }
     }
 
+    SendbirdUIKit().customParamsHandler?.onBeforeSendFileMessage(params);
+
     // Use queue manager for sequential file sending
     SBUFileSendQueueManager().addFileTask(
       channel: channel,
@@ -569,6 +571,10 @@ mixin SBUBaseComponent {
           params.replyToChannel = true;
           params.parentMessageId = replyingToMessage.messageId;
         }
+
+        SendbirdUIKit()
+            .customParamsHandler
+            ?.onBeforeSendMultipleFilesMessage(params);
 
         SBUFileSendQueueManager().addMultipleFilesTask(
           channel: channel,
